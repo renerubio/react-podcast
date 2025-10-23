@@ -1,0 +1,7 @@
+{
+  "endOfLine": "lf",
+  "plugins": ["prettier-plugin-organize-imports"],
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none"
+}

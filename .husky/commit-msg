@@ -1,0 +1,45 @@
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+no_color='\033[0m'
+
+printf "${yellow}Executing commit-msg hook...${no_color}\n\n"
+
+COMMIT_MSG_FILE=$1
+
+# Read the commit message from the file
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Define the allowed commit message prefixes
+ALLOWED_PREFIXES="feat: fix: refactor: chore: docs: test: style: ci: perf: build: revert: wip:"
+
+# Check if the commit message starts with an allowed prefix
+printf "${yellow}Checking commit message prefix...${no_color}\n"
+
+PREFIX_MATCH=false
+
+for PREFIX in $ALLOWED_PREFIXES; do
+  if echo $COMMIT_MSG | grep -q "^$PREFIX"; then
+    PREFIX_MATCH=true
+    break
+  fi
+done
+
+# If the commit message doesn't start with an allowed prefix, reject the commit
+if ! $PREFIX_MATCH; then
+  printf "${red}COMMIT REJECTED! Commit message must start with one of the following prefixes:${no_color}\n"
+  printf "$ALLOWED_PREFIXES\n"
+  exit 1
+fi
+
+# Check if the first character is lowercase
+printf "${yellow}Checking commit message first character is lowercase...${no_color}\n"
+
+FIRST_CHAR=$(echo "$COMMIT_MSG" | head -c 1)
+if [[ ! "$FIRST_CHAR" =~ [a-z] ]]; then
+  printf "${red}COMMIT REJECTED! Commit message must be written with lowercase letter.${no_color}\n"
+  exit 1
+fi
+
+printf "${green}PRE-COMMIT-MSG hook OK!${no_color}\n"
+exit 0;

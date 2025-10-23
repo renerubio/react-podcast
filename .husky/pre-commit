@@ -1,0 +1,45 @@
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+no_color='\033[0m'
+
+printf "${yellow}Executing pre-commit hook...${no_color}\n\n"
+
+# Format and lint ONLY the modified files
+printf "${yellow}Format and lint ONLY the modified files...${no_color}\n"
+
+npx lint-staged
+
+FILES_PATTERN='\.(js|ts)(\..+)?$'
+
+# Check for "console." references in your code
+printf "${yellow}Searching for 'console.' declarations...${no_color}\n"
+
+FORBIDDEN='console\.[clear|dir|log|info|warn|error]'
+messageConsole="COMMIT REJECTED!  Found console. references. Please remove them before committing."
+if git diff --cached --name-only | \
+    grep -E $FILES_PATTERN | \
+    xargs grep --with-filename -n $FORBIDDEN | \
+    grep -v '//';
+then
+    printf "${red}$messageConsole${no_color}\n"
+    exit 1;
+fi
+
+# Check for "debugger" references in your code
+printf "${yellow}Searching for 'debugger' declarations...${no_color}\n"
+
+FORBIDDEN='debugger'
+messageDebugger="COMMIT REJECTED!  Found debugger references. Please remove them before committing."
+
+if git diff --cached --name-only | \
+    grep -E $FILES_PATTERN | \
+    xargs grep --with-filename -n $FORBIDDEN | \
+    grep -v '//';
+then
+    echo -e "${red}$messageDebugger${no_color}"
+    exit 1;
+fi
+
+printf "${green}PRE-COMMIT hook OK!${no_color}\n"
+exit 0;

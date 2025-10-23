@@ -1,0 +1,35 @@
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+no_color='\033[0m'
+
+printf "${yellow}Executing pre-push hook...${no_color}\n"
+
+local_branch_name="$(git rev-parse --abbrev-ref HEAD)"
+
+valid_branch_regex='^((feat|fix|refactor|chore|docs|test|style|ci|perf|build|wip)\/[a-zA-Z0-9\-]+)$'
+
+message="COMMIT REJECTED! Please check your branch name."
+
+# Check branch name
+printf "${yellow}Checking branch name...${no_color}\n\n"
+
+if [[ ! $local_branch_name =~ $valid_branch_regex ]]; then
+    printf "${red}$message${no_color}\n"
+    exit 1
+fi
+
+# Run tests
+printf "${yellow}Running Tests...${no_color}\n"
+if ! npm run test; then
+    printf "${red}PUSH REJECTED! Tests failed. Please fix them before committing.${no_color}\n"
+    exit 1
+fi
+
+# Run linter
+printf "${yellow}Executing Linter...${no_color}\n"
+
+if ! npm run lint; then
+    printf "${red}PUSH REJECTED! Linting errors found. Please fix them before committing.${no_color}\n"
+    exit 1
+fi
