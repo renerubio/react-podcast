@@ -12,31 +12,32 @@
     "format:fix": "prettier . --write",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,md,json}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,css,scss}": "prettier --write"
   },
   "dependencies": {
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "20",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19",
     "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "^9",
+    "eslint": "9",
     "eslint-config-next": "16.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
-    "next": "^16.0.0",
-    "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "typescript": "^5.9.3"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,css,md,json}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "eslint-config-prettier": "10.1.8",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.6",
+    "next": "16.0.0",
+    "prettier": "3.6.2",
+    "prettier-plugin-organize-imports": "4.3.0",
+    "typescript": "5.9.3"
   }
 }
