@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/components/*": ["./src/*"]
+      "@/src/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules"],
