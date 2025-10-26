@@ -1,5 +1,6 @@
 'use client'
 
+import { t } from '@/src/i18nConfig'
 import Link from 'next/link'
 
 export default function AppHeader() {
@@ -18,7 +19,7 @@ export default function AppHeader() {
       }}
     >
       <Link href="/" style={{ fontWeight: 700, textDecoration: 'none' }}>
-        React Podcasts
+        {t('podcaster')}
       </Link>
       {/* Aquí podrías añadir search global o acciones */}
       <div />
