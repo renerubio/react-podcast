@@ -13,5 +13,6 @@ export const en: Messages = {
   error_use_navigation_context:
     'useNavigationContext must be used within NavigationProvider',
   podcast_description: 'Description',
-  author: 'Author'
+  author: 'Author',
+  filter_podcasts_placeholder: 'Filter podcasts...'
 }

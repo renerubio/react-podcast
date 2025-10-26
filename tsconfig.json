@@ -23,7 +23,8 @@
       "@/components/*": ["./src/components/*"],
       "@/services/*": ["./src/services/*"],
       "@/context/*": ["./src/context/*"],
-      "@/locale/*": ["./src/locale/*"]
+      "@/locale/*": ["./src/locale/*"],
+      "@/lib/*": ["./src/lib/*"]
     }
   },
   "exclude": ["node_modules"],
