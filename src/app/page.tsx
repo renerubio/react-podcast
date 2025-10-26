@@ -2,14 +2,17 @@
 
 import { useNavigationContext } from '@/context/NavigationContext'
 import { fetchTopPodcasts, type TopPodcast } from '@/services/podcasts'
+import SearchInput from '@/src/components/SearchInput'
 import { t } from '@/src/i18nConfig'
+import { normalize } from '@/src/lib/normalize'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function HomePage() {
   const [data, setData] = useState<TopPodcast[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
   const { setLoading } = useNavigationContext()
 
   useEffect(() => {
@@ -22,7 +25,7 @@ export default function HomePage() {
         setData(list)
       } catch (e) {
         console.error(e)
-        setError(`Error: ${e} - ${t('error_load_top_100')}`)
+        setError('Failed to load Top 100')
       } finally {
         setLoading(false)
       }
@@ -33,13 +36,47 @@ export default function HomePage() {
     }
   }, [setLoading])
 
+  const filtered = useMemo(() => {
+    if (!data) return []
+    const q = normalize(query)
+    if (!q) return data
+    return data.filter((p) => {
+      const title = normalize(p.title)
+      const author = normalize(p.author)
+      return title.includes(q) || author.includes(q)
+    })
+  }, [data, query])
+
   if (error)
     return <main style={{ padding: 24 }}>{t('error_loading_data')}</main>
   if (!data) return <main style={{ padding: 24 }}>{t('loading')}</main>
 
   return (
     <main style={{ padding: 24 }}>
-      <h1 style={{ margin: '0 0 12px' }}>{t('home_title')}</h1>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          gap: 16,
+          marginBottom: 16
+        }}
+      >
+        <p
+          style={{
+            background: '#174ea6',
+            color: '#fff',
+            padding: '4px 12px',
+            borderRadius: 8,
+            fontWeight: 500,
+            fontSize: 16,
+            boxShadow: '0 1px 4px rgba(23,78,166,0.07)'
+          }}
+        >
+          {filtered.length}
+        </p>
+        <SearchInput value={query} onChange={setQuery} />
+      </div>
       <div
         style={{
           display: 'grid',
@@ -47,7 +84,7 @@ export default function HomePage() {
           gap: 16
         }}
       >
-        {data.map((p) => (
+        {filtered.map((p) => (
           <Link
             key={p.id}
             href={`/podcast/${p.id}`}
