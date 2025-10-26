@@ -14,6 +14,8 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -33,6 +35,13 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+main {
+  min-height: 100vh;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 @media (prefers-color-scheme: dark) {

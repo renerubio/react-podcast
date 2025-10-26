@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/components/*": ["./src/*"]
+      "@/src/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/context/*": ["./src/context/*"]
     }
   },
   "exclude": ["node_modules"],
