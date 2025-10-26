@@ -2,6 +2,7 @@
 
 import { useNavigationContext } from '@/context/NavigationContext'
 import { fetchTopPodcasts, type TopPodcast } from '@/services/podcasts'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -59,9 +60,11 @@ export default function HomePage() {
               background: '#fff'
             }}
           >
-            <img
+            <Image
               src={p.image}
               alt={p.title}
+              width={220}
+              height={220}
               style={{
                 width: '100%',
                 borderRadius: 8,
