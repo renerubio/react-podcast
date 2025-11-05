@@ -2,12 +2,14 @@
 
 import { createContext, useContext, useState } from 'react'
 
-type NavigationContextValue = {
+type NavigationCtx = {
   loading: boolean
-  setLoading: (v: boolean) => void
+  start: (message?: string) => void
+  stop: () => void
+  message?: string
 }
 
-const NavigationContext = createContext<NavigationContextValue | null>(null)
+const Ctx = createContext<NavigationCtx | null>(null)
 
 export function NavigationProvider({
   children
@@ -15,18 +17,26 @@ export function NavigationProvider({
   children: React.ReactNode
 }) {
   const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<string | undefined>()
+
+  const start = (msg?: string) => {
+    setMessage(msg)
+    setLoading(true)
+  }
+  const stop = () => {
+    setLoading(false)
+    setMessage(undefined)
+  }
+
   return (
-    <NavigationContext.Provider value={{ loading, setLoading }}>
+    <Ctx.Provider value={{ loading, start, stop, message }}>
       {children}
-    </NavigationContext.Provider>
+    </Ctx.Provider>
   )
 }
 
-export function useNavigationContext() {
-  const context = useContext(NavigationContext)
-  if (!context)
-    throw new Error(
-      'useNavigationContext must be used within NavigationProvider'
-    )
-  return context
+export function useLoading() {
+  const ctx = useContext(Ctx)
+  if (!ctx) throw new Error('useLoading must be used within NavigationProvider')
+  return ctx
 }

@@ -39,7 +39,21 @@ a {
 
 main {
   min-height: 100vh;
+  padding: 24px;
 }
+
+header {
+  width: 100%;
+  min-width: 400px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
 a:hover {
   text-decoration: underline;
 }

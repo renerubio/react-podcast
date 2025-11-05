@@ -1,9 +1,9 @@
 import AppHeader from '@/components/AppHeader'
-import NavIndicator from '@/components/NavIndicator'
 import { NavigationProvider } from '@/context/NavigationContext'
 import { t } from '@/src/i18nConfig'
+import '@/styles/globals.css'
+import '@/styles/skeletons.css'
 import type { Metadata } from 'next'
-import './globals.css'
 
 export const metadata: Metadata = {
   title: t('metadata_title'),
@@ -20,8 +20,7 @@ export default function RootLayout({
       <body>
         <NavigationProvider>
           <AppHeader />
-          <NavIndicator />
-          <main>{children}</main>
+          {children}
         </NavigationProvider>
       </body>
     </html>

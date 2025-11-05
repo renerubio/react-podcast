@@ -1,0 +1,104 @@
+/* Skeleton Loader Styles */
+.skeleton-loader-podcast {
+  position: relative;
+  height: 210px;
+}
+
+.skeleton-loader-podcast:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    radial-gradient(circle 48px at 48px 48px, #aaaaaa 100%, transparent 0),
+    linear-gradient(#aaaaaa 16px, transparent 0),
+    linear-gradient(#aaaaaa 9px, transparent 0),
+    linear-gradient(#aaaaaa 8px, transparent 0),
+    linear-gradient(#ffffff 100%, transparent 0);
+  background-size:
+    92.5px 100%,
+    96px 96px,
+    128px 16px,
+    128px 9px,
+    128px 8px,
+    100% 100%;
+  background-position:
+    0 0,
+    44px 8px,
+    29px 125px,
+    29px 152px,
+    29px 172.5px,
+    0 0;
+  animation: skeleton-podcast-animation 1500ms infinite;
+}
+
+@keyframes skeleton-podcast-animation {
+  to {
+    background-position:
+      100% 0,
+      44px 8px,
+      29px 125px,
+      29px 152px,
+      29px 172.5px,
+      0 0;
+  }
+}
+
+/* Skeleton Filter Styles */
+.skeleton-filter {
+  position: relative;
+  height: 49px;
+  width: 215px;
+}
+
+.skeleton-filter:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(#aaaaaa 31px, transparent 0),
+    linear-gradient(#aaaaaa 31px, transparent 0),
+    linear-gradient(#ffffff 100%, transparent 0);
+  background-size:
+    114.5px 100%,
+    44px 31px,
+    144px 31px,
+    100% 100%;
+  background-position:
+    0 0,
+    11px 8px,
+    71px 8px,
+    0 0;
+  animation: skeleton-filter-animation 2000ms infinite;
+}
+
+@keyframes skeleton-filter-animation {
+  to {
+    background-position:
+      100% 0,
+      11px 8px,
+      71px 8px,
+      0 0;
+  }
+}

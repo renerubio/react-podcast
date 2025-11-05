@@ -1,0 +1,2 @@
+export const SKELETON_PODCASTS_LENGTH = 50
+export const TIMEOUT_TOAST_OUT_MS = 2000
