@@ -5,18 +5,16 @@ import { t } from '@/src/i18nConfig'
 type Props = {
   value: string
   onChange: (v: string) => void
+  disable?: boolean
 }
 
-export default function SearchInput({ value, onChange }: Props) {
+export default function SearchInput({
+  value,
+  onChange,
+  disable = false
+}: Props) {
   return (
-    <div
-      style={{
-        margin: '16px 0',
-        display: 'flex',
-        gap: 8,
-        alignItems: 'center'
-      }}
-    >
+    <div className="filter-podcast-search-input-container">
       <input
         id="search"
         type="text"
@@ -24,15 +22,8 @@ export default function SearchInput({ value, onChange }: Props) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-label={t('filter_podcasts_placeholder')}
-        style={{
-          flex: 1,
-          height: 36,
-          padding: '0 12px',
-          border: '1px solid #e5e7eb',
-          borderRadius: 5,
-          outline: 'none',
-          width: '30%'
-        }}
+        className="filter-podcast-search-input"
+        disabled={disable}
       />
     </div>
   )

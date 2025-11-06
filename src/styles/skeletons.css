@@ -55,10 +55,19 @@
 }
 
 /* Skeleton Filter Styles */
-.skeleton-filter {
+.skeleton-filter-podcast-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.skeleton-filter-podcast {
   position: relative;
   height: 49px;
   width: 215px;
+  margin: 33px 25px 0 0;
 }
 
 .skeleton-filter:after {

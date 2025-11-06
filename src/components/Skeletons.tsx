@@ -4,11 +4,7 @@ export const SkeletonPodcastItem = () => (
   <div className="skeleton-loader-podcast"></div>
 )
 
-export const SkeletonPodcastList = ({
-  length = SKELETON_PODCASTS_LENGTH
-}: {
-  length?: number
-}) => (
+export const SkeletonPodcastList = ({ length }: { length: number }) => (
   <div className="podcasts-container">
     {Array.from({ length }).map((_, i) => (
       <SkeletonPodcastItem key={i} />
@@ -17,7 +13,18 @@ export const SkeletonPodcastList = ({
 )
 
 export const SkeletonFilter = () => (
-  <div className="filter-podcast-container">
-    <div className="skeleton-filter"></div>
+  <div className="skeleton-filter-podcast-container">
+    <div className="skeleton-filter-podcast"></div>
   </div>
+)
+
+export const SkeletonHomePage = ({
+  length = SKELETON_PODCASTS_LENGTH
+}: {
+  length?: number
+}) => (
+  <>
+    <SkeletonFilter />
+    <SkeletonPodcastList length={length} />
+  </>
 )

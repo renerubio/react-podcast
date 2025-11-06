@@ -76,9 +76,26 @@
 .filter-podcast-number-results {
   background: #174ea6;
   color: #fff;
-  padding: 4px 12px;
+  padding: 9px 12px;
+  min-height: 36px;
   border-radius: 8px;
   font-weight: 500;
   font-size: 16px;
   box-shadow: 0 1px 4px rgba(23, 78, 166, 0.07);
+}
+.filter-podcast-search-input-container {
+  margin: 16px 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-podcast-search-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  outline: none;
+  width: 30%;
 }
