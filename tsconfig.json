@@ -20,11 +20,13 @@
     ],
     "paths": {
       "@/src/*": ["./src/*"],
+      "@/styles/*": ["./src/styles/*"],
       "@/components/*": ["./src/components/*"],
       "@/services/*": ["./src/services/*"],
       "@/context/*": ["./src/context/*"],
       "@/locale/*": ["./src/locale/*"],
-      "@/lib/*": ["./src/lib/*"]
+      "@/lib/*": ["./src/lib/*"],
+      "@/utils/*": ["./src/utils/*"]
     }
   },
   "exclude": ["node_modules"],

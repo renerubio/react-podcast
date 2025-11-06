@@ -1,147 +1,42 @@
 'use client'
-
-import { useNavigationContext } from '@/context/NavigationContext'
+import PodcastHomePage from '@/components/PodcastHomePage'
+import { SkeletonHomePage } from '@/components/Skeletons'
+import { useLoading } from '@/context/NavigationContext'
 import { fetchTopPodcasts, type TopPodcast } from '@/services/podcasts'
-import SearchInput from '@/src/components/SearchInput'
-import { t } from '@/src/i18nConfig'
-import { normalize } from '@/src/lib/normalize'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import '@/styles/components.css'
+import { stopWithTimeout } from '@/utils/utils'
+import { Suspense, useEffect, useState } from 'react'
 
-export default function HomePage() {
-  const [data, setData] = useState<TopPodcast[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [query, setQuery] = useState('')
-  const { setLoading } = useNavigationContext()
+/**
+ * HomePage component displays the main landing page for the podcast application.
+ *
+ * It initializes and manages the loading state for fetching the top podcasts,
+ * and renders the PodcastHomePage component within a React Suspense boundary.
+ * While the podcast data is loading, a SkeletonHomePage is shown as a fallback.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered home page with podcast data or a loading skeleton.
+ */
+const HomePage = () => {
+  const [dataPromise, setDataPromise] = useState<Promise<TopPodcast[]>>(
+    Promise.resolve([])
+  )
+  const { start, stop } = useLoading()
 
   useEffect(() => {
-    let alive = true
-    async function run() {
-      try {
-        setLoading(true)
-        const list = await fetchTopPodcasts()
-        if (!alive) return
-        setData(list)
-      } catch (e) {
-        console.error(e)
-        setError('Failed to load Top 100')
-      } finally {
-        setLoading(false)
-      }
-    }
-    run()
-    return () => {
-      alive = false
-    }
-  }, [setLoading])
-
-  const filtered = useMemo(() => {
-    if (!data) return []
-    const q = normalize(query)
-    if (!q) return data
-    return data.filter((p) => {
-      const title = normalize(p.title)
-      const author = normalize(p.author)
-      return title.includes(q) || author.includes(q)
-    })
-  }, [data, query])
-
-  if (error)
-    return <main style={{ padding: 24 }}>{t('error_loading_data')}</main>
-  if (!data) return <main style={{ padding: 24 }}>{t('loading')}</main>
+    start('Loading top podcasts...')
+    setDataPromise(fetchTopPodcasts())
+    stopWithTimeout({ stop })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <main style={{ padding: 24 }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 16,
-          marginBottom: 16
-        }}
-      >
-        <p
-          style={{
-            background: '#174ea6',
-            color: '#fff',
-            padding: '4px 12px',
-            borderRadius: 8,
-            fontWeight: 500,
-            fontSize: 16,
-            boxShadow: '0 1px 4px rgba(23,78,166,0.07)'
-          }}
-        >
-          {filtered.length}
-        </p>
-        <SearchInput value={query} onChange={setQuery} />
-      </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-          gap: 16
-        }}
-      >
-        {filtered.map((p) => (
-          <Link
-            key={p.id}
-            href={`/podcast/${p.id}`}
-            style={{
-              display: 'block',
-              border: '1px solid #e5e7eb',
-              borderRadius: 5,
-              padding: '0 12px 12px',
-              textDecoration: 'none',
-              background: '#fff',
-              textAlign: 'center',
-              marginTop: '80px',
-              height: 'fit-content',
-              transition: 'transform 0.18s, box-shadow 0.18s',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}
-            onMouseEnter={(e) => {
-              ;(e.currentTarget as HTMLElement).style.transform =
-                'translateY(-6px) scale(1.03)'
-              ;(e.currentTarget as HTMLElement).style.boxShadow =
-                '0 6px 24px rgba(0,0,0,0.14)'
-            }}
-            onMouseLeave={(e) => {
-              ;(e.currentTarget as HTMLElement).style.transform = ''
-              ;(e.currentTarget as HTMLElement).style.boxShadow =
-                '0 2px 8px rgba(0,0,0,0.08)'
-            }}
-          >
-            <Image
-              src={p.image}
-              alt={p.title}
-              width={100}
-              height={100}
-              style={{
-                width: 'auto',
-                height: 'auto',
-                borderRadius: '50%',
-                aspectRatio: '1 / 1',
-                objectFit: 'cover',
-                marginTop: '-40px'
-              }}
-            />
-            <h3
-              style={{
-                margin: '2px 0 10px',
-                fontSize: 14,
-                textTransform: 'uppercase'
-              }}
-            >
-              {p.title}
-            </h3>
-            <p style={{ margin: 0, opacity: 0.7, fontSize: 14 }}>
-              {t('author')}: {p.author}
-            </p>
-          </Link>
-        ))}
-      </div>
-    </main>
+    <>
+      <Suspense fallback={<SkeletonHomePage />}>
+        <PodcastHomePage dataPromise={dataPromise} />
+      </Suspense>
+    </>
   )
 }
+
+export default HomePage

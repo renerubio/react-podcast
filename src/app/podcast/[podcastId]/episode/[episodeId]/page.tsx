@@ -1,13 +1,22 @@
 'use client'
 
+import { useLoading } from '@/src/context/NavigationContext'
+import { stopWithTimeout } from '@/utils/utils'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default function EpisodeDetailPage() {
+const EpisodeDetailPage = () => {
   const { podcastId, episodeId } = useParams<{
     podcastId: string
     episodeId: string
   }>()
+  const { stop } = useLoading()
+
+  useEffect(() => {
+    stopWithTimeout({ stop })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <section style={{ padding: 24 }}>
@@ -21,3 +30,5 @@ export default function EpisodeDetailPage() {
     </section>
   )
 }
+
+export default EpisodeDetailPage

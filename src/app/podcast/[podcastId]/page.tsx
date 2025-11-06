@@ -1,10 +1,20 @@
 'use client'
 
+import { useLoading } from '@/context/NavigationContext'
+import BackButton from '@/src/components/BackButton'
+import { stopWithTimeout } from '@/utils/utils'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default function PodcastDetailPage() {
+const PodcastDetailPage = () => {
   const { podcastId } = useParams<{ podcastId: string }>()
+  const { start, stop } = useLoading()
+
+  useEffect(() => {
+    stopWithTimeout({ stop })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <section style={{ padding: 24 }}>
@@ -14,16 +24,30 @@ export default function PodcastDetailPage() {
       {/* Demo: links a episodios */}
       <ul>
         <li>
-          <Link href={`/podcast/${podcastId}/episode/1`}>Ir al episodio 1</Link>
+          <Link
+            onClick={() => {
+              start(`Navigating to podcast ${podcastId} episode 1`)
+            }}
+            href={`/podcast/${podcastId}/episode/1`}
+          >
+            Ir al episodio 1
+          </Link>
         </li>
         <li>
-          <Link href={`/podcast/${podcastId}/episode/2`}>Ir al episodio 2</Link>
+          <Link
+            onClick={() => {
+              start(`Navigating to podcast ${podcastId} episode 2`)
+            }}
+            href={`/podcast/${podcastId}/episode/2`}
+          >
+            Ir al episodio 2
+          </Link>
         </li>
       </ul>
 
-      <div style={{ marginTop: 16 }}>
-        <Link href="/">← Volver a Home</Link>
-      </div>
+      <BackButton />
     </section>
   )
 }
+
+export default PodcastDetailPage

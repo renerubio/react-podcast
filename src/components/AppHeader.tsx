@@ -1,28 +1,28 @@
 'use client'
 
+import { useLoading } from '@/context/NavigationContext'
 import { t } from '@/src/i18nConfig'
+import { stopWithTimeout } from '@/utils/utils'
 import Link from 'next/link'
 
 export default function AppHeader() {
+  const { loading, start, stop, message } = useLoading()
+
+  const handleLinkClick = () => {
+    start('Navigating to home page')
+    stopWithTimeout({ stop })
+  }
+
   return (
-    <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '12px 20px',
-        background: '#fff',
-        borderBottom: '1px solid #eee'
-      }}
-    >
-      <Link href="/" style={{ fontWeight: 700, textDecoration: 'none' }}>
+    <header>
+      <Link href="/" onClick={handleLinkClick} className="header-link">
         {t('podcaster')}
       </Link>
-      {/* Aquí podrías añadir search global o acciones */}
-      <div />
+      {loading && (
+        <div className="header-loading-indicator" title={message ?? 'Loading…'}>
+          {message ?? 'Loading…'}
+        </div>
+      )}
     </header>
   )
 }
