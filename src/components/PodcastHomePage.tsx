@@ -1,8 +1,12 @@
+'use client'
 import Filter from '@/components/Filter'
 import PodcastList from '@/components/PodcastList'
 import { TopPodcast } from '@/services/podcasts'
 import { normalize } from '@/utils/normalize'
-import { use, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useLoading } from '../context/NavigationContext'
+import { stopWithTimeout } from '../utils/utils'
+import { SkeletonHomePage } from './Skeletons'
 
 /**
  * PodcastHomePage component displays a list of top podcasts with filtering capabilities.
@@ -17,13 +21,20 @@ import { use, useMemo, useState } from 'react'
  *
  * @returns The main content area with filter controls and a filtered podcast list, or null if no podcasts are available.
  */
-const PodcastHomePage = ({
-  dataPromise
-}: {
-  dataPromise: Promise<TopPodcast[]>
-}) => {
-  const podcasts = use(dataPromise)
+const PodcastHomePage = ({ data }: { data: any }) => {
+  const podcasts = data
   const [query, setQuery] = useState('')
+  /* const [dataPromise, setDataPromise] = useState<Promise<TopPodcast[]>>(
+    Promise.resolve([])
+  ) */
+  const { start, stop } = useLoading()
+
+  useEffect(() => {
+    start('Loading top podcasts...')
+    /*     setDataPromise(fetchTopPodcasts())
+     */ stopWithTimeout({ stop })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filtered = useMemo(() => {
     if (!query) return podcasts
@@ -39,8 +50,10 @@ const PodcastHomePage = ({
 
   return (
     <main>
-      <Filter query={query} setQuery={setQuery} filtered={filtered} />
-      <PodcastList podcastsFiltered={filtered} />
+      <Suspense fallback={<SkeletonHomePage />}>
+        <Filter query={query} setQuery={setQuery} filtered={filtered} />
+        <PodcastList podcastsFiltered={filtered} />
+      </Suspense>
     </main>
   )
 }

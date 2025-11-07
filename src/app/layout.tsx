@@ -1,4 +1,5 @@
 import AppHeader from '@/components/AppHeader'
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 import { NavigationProvider } from '@/context/NavigationContext'
 import { t } from '@/src/i18nConfig'
 import '@/styles/globals.css'
@@ -21,6 +22,7 @@ export default function RootLayout({
         <NavigationProvider>
           <AppHeader />
           {children}
+          <ServiceWorkerRegister />
         </NavigationProvider>
       </body>
     </html>
