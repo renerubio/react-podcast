@@ -22,5 +22,8 @@ export const en: Messages = {
   page: 'Page',
   title_song: 'Title song',
   author_song: 'Author song',
-  logo_song: 'Logo song'
+  logo_song: 'Logo song',
+  error_network:
+    "We couldn't connect to the server. Please try again when you have a network connection.",
+  offline: 'You are offline'
 }

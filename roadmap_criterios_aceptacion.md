@@ -53,11 +53,11 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [ ] Al cargar `/`, si hay caché válida, se muestra **al instante**.
-- [ ] Revalidación silenciosa en segundo plano contra `/api/top-podcasts`.
-- [ ] TTL = 24 h; al expirar, se refresca automáticamente.
-- [ ] Fallback: sin red pero con caché válida, se mantiene la UI.
-- [ ] Errores solo en consola; mensaje simple en UI si no hay caché ni red.
+- [x] Al cargar `/`, si hay caché válida, se muestra **al instante**.
+- [x] Revalidación silenciosa en segundo plano contra `/service/top-podcasts`.
+- [x] TTL = 24 h; al expirar, se refresca automáticamente.
+- [x] Fallback: sin red pero con caché válida, se mantiene la UI.
+- [x] Errores solo en consola;
 
 ---
 
