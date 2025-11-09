@@ -13,7 +13,7 @@ export const en: Messages = {
   error_loading_data: 'Error loading data.',
   error_use_navigation_context:
     'useNavigationContext must be used within NavigationProvider',
-  podcast_description: 'Description',
+  description: 'Description',
   author: 'Author',
   filter_podcasts_placeholder: 'Filter podcasts...',
   home: 'Home',
@@ -25,5 +25,12 @@ export const en: Messages = {
   logo_song: 'Logo song',
   error_network:
     "We couldn't connect to the server. Please try again when you have a network connection.",
-  offline: 'You are offline'
+  offline: 'You are offline',
+  podcast_detail: 'Podcast Details',
+  podcast_not_found: 'Podcast not found',
+  episodes: 'Episodes',
+  by: 'by',
+  title: 'Title',
+  date: 'Date',
+  duration: 'Duration'
 }

@@ -65,11 +65,11 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [ ] Barra lateral con imagen, título, autor, descripción.
-- [ ] Sección principal: número total de episodios y lista (título, fecha, duración).
-- [ ] Navegación a `/podcast/[id]/episode/[episodeId]` sin recarga.
-- [ ] Indicador de navegación durante la transición.
-- [ ] Normalización de datos (fechas, duración).
+- [x] Barra lateral con imagen, título, autor, descripción.
+- [x] Sección principal: número total de episodios y lista (título, fecha, duración).
+- [x] Navegación a `/podcast/[id]/episode/[episodeId]` sin recarga.
+- [x] Indicador de navegación durante la transición.
+- [x] Normalización de datos (fechas, duración).
 
 ---
 
@@ -77,10 +77,11 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [ ] Caché cliente por `podcastId` con TTL 24 h.
-- [ ] Revalidación silenciosa al reabrir el podcast.
-- [ ] Fallback sin red: muestra último estado cacheado.
-- [ ] Logs en consola ante errores; UI estable.
+- [] Caché cliente por `podcastId` con TTL 24 h.
+- [] Revalidación silenciosa al reabrir el podcast.
+- [] Fallback sin red: muestra último estado cacheado.
+- [] Logs en consola ante errores; UI estable.
+- [] Skeletons y loaders
 
 ---
 
