@@ -1,12 +1,64 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base */
+  --color-bg: #fff;
+  --color-fg: #171717;
+
+  /* Brand */
+  --color-primary: #174ea6;
+  --color-primary-dark: #111;
+
+  /* Borders and shadows */
+  --color-border: #e5e7eb;
+  --color-border-light: #e5e5e5;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-shadow-primary: rgba(23, 78, 166, 0.07);
+
+  /* Cards / header */
+  --color-card-bg: #fff;
+  --color-card-border: #e5e7eb;
+  --color-header-bg: #fff;
+  --color-header-border: #eee;
+
+  /* Skeleton */
+  --color-skeleton-bg: #fff;
+  --color-skeleton-dark: #aaa; /* antes #aaaaaa -> abreviado */
+  --color-skeleton-light: #e6e6e6;
+  --color-skeleton-shimmer: rgba(255, 255, 255, 0.8);
+  --color-skeleton-header: #f7f7f7;
+  --color-skeleton-header-text: #999;
+  --color-skeleton-border: #e5e5e5;
+  --color-skeleton-row-border: #eee;
+  --color-skeleton-table-bg: #f7f7f7;
+
+  /* Secondary texts */
+  --color-subtitle: #555;
+
+  /* Aux: blanco en RGB para gradientes */
+  --color-white-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-bg: #0a0a0a;
+    --color-fg: #ededed;
+
+    --color-header-bg: #111;
+    --color-card-bg: #171717;
+
+    --color-border: #222;
+    --color-border-light: #333;
+    --color-header-border: #222;
+
+    --color-skeleton-bg: #171717;
+    --color-skeleton-dark: #444;
+    --color-skeleton-light: #222;
+    --color-skeleton-header: #222;
+    --color-skeleton-header-text: #bbb;
+    --color-skeleton-border: #222;
+    --color-skeleton-row-border: #333;
+    --color-skeleton-table-bg: #171717;
+
+    --color-subtitle: #bbb;
   }
 }
 
@@ -19,8 +71,8 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--color-fg);
+  background: var(--color-bg);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,6 +82,12 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 16px 0;
 }
 
 a {
@@ -50,8 +108,8 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+  background: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border);
 }
 
 a:hover {
