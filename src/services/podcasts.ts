@@ -48,12 +48,9 @@ export async function fetchTopPodcasts(): Promise<TopPodcast[]> {
  */
 export async function fetchPodcastById(id: string): Promise<IPodcastDetail> {
   const url = APPLE_PODCAST_LOOKUP_URL.replace('{podcastId}', id)
-  const fetchOptions =
-    process.env.NODE_ENV === 'development'
-      ? { cache: 'no-store' as const }
-      : { next: { revalidate: REVALIDATE_SECONDS } }
-
-  const res = await fetch(url, fetchOptions)
+  const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`, {
+    cache: 'no-store'
+  })
   if (!res.ok) throw new Error(`Failed to fetch podcast ${id}: ${res.status}`)
   const json = await res.json()
   const podcast = json?.results?.[0] ?? null
@@ -86,12 +83,9 @@ export async function scrappingFromFeedUrl<T>(url: string): Promise<T> {
  * @throws Will throw an error if the network request fails or the response is not OK.
  */
 export async function fetchEpisode(url: string): Promise<IEpisode> {
-  const fetchOptions =
-    process.env.NODE_ENV === 'development'
-      ? { cache: 'no-store' as const }
-      : { next: { revalidate: REVALIDATE_SECONDS } }
-
-  const res = await fetch(url, fetchOptions)
+  const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`, {
+    cache: 'no-store'
+  })
   if (!res.ok) throw new Error(`Failed to fetch podcast ${url}: ${res.status}`)
   const json = await res.json()
   const podcast = json?.results?.[0] ?? null
