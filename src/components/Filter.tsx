@@ -1,5 +1,5 @@
+import SearchInput from '@/components/SearchInput'
 import '@/styles/components.css'
-import SearchInput from './SearchInput'
 
 /**
  * Filter component for displaying the number of filtered podcast results and a search input.
@@ -21,11 +21,7 @@ const Filter = ({
 }) => (
   <div className="filter-podcast-container">
     <span className="filter-podcast-number-results">{filtered.length}</span>
-    <SearchInput
-      value={query}
-      onChange={setQuery}
-      disable={filtered.length === 0}
-    />
+    <SearchInput value={query} onChange={setQuery} />
   </div>
 )
 

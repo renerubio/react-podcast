@@ -77,11 +77,11 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [] Caché cliente por `podcastId` con TTL 24 h.
-- [] Revalidación silenciosa al reabrir el podcast.
-- [] Fallback sin red: muestra último estado cacheado.
-- [] Logs en consola ante errores; UI estable.
-- [] Skeletons y loaders
+- [x] Caché cliente por `podcastId` con TTL 24 h.
+- [x] Revalidación silenciosa al reabrir el podcast.
+- [x] Fallback sin red: muestra último estado cacheado.
+- [x] Logs en consola ante errores; UI estable.
+- [x] Skeletons y loaders
 
 ---
 
@@ -89,10 +89,9 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [ ] Reutiliza la barra lateral del detalle del podcast (links activos al detalle).
-- [ ] Sección principal: título, descripción con **HTML interpretado** y **audio HTML5**.
-- [ ] Si falla el audio, la UI se mantiene y muestra aviso simple.
-- [ ] Indicador de navegación coherente con el resto de vistas.
+- [x] Reutiliza la barra lateral del detalle del podcast (links activos al detalle).
+- [x] Sección principal: título, descripción con **HTML interpretado** y **audio HTML5**.
+- [x] Indicador de navegación coherente con el resto de vistas.
 
 ---
 
@@ -100,11 +99,11 @@ Autor: René · Última actualización: 04-nov-2025
 
 **Criterios de aceptación**
 
-- [ ] Todas las vistas completas y estables (Home + Detalle Podcast + Detalle Episodio).
-- [ ] Lint y TypeScript sin errores; tests básicos aprobados (si se incluyen).
-- [ ] README actualizado: stack, arquitectura por capas y decisiones.
-- [ ] Diseño responsive y fiel al enunciado.
-- [ ] Tags y Releases documentados; consola limpia de errores.
+- [x] Todas las vistas completas y estables (Home + Detalle Podcast + Detalle Episodio).
+- [x] Lint y TypeScript sin errores; tests básicos aprobados (si se incluyen).
+- [x] README actualizado: stack, arquitectura por capas y decisiones.
+- [x] Diseño responsive y fiel al enunciado.
+- [x] Tags y Releases documentados; consola limpia de errores.
 
 ---
 

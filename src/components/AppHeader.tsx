@@ -15,7 +15,12 @@ export default function AppHeader() {
 
   return (
     <header>
-      <Link href="/" onClick={handleLinkClick} className="header-link">
+      <Link
+        href="/"
+        onClick={handleLinkClick}
+        className="header-link"
+        title={t('home')}
+      >
         {t('podcaster')}
       </Link>
       {loading && (

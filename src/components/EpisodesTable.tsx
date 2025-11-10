@@ -1,17 +1,7 @@
 'use client'
 import { useLoading } from '@/context/NavigationContext'
+import { t } from '@/src/i18nConfig'
 import Link from 'next/link'
-import { t } from '../i18nConfig'
-
-export type TEpisode = {
-  id: string | number
-  title: string
-  url?: string
-  /** ISO date string, e.g. "2016-03-01T00:00:00Z" */
-  date: string
-  /** seconds (number) o cadena ya formateada "14:00" */
-  duration: number | string
-}
 
 const formatDate = (iso: string) =>
   new Intl.DateTimeFormat(undefined, {
@@ -46,7 +36,7 @@ export const EpisodesTable = ({
   episodes,
   podcastId
 }: {
-  episodes: TEpisode[]
+  episodes: IEpisode[]
   podcastId: string
 }) => {
   const { start } = useLoading()
@@ -72,8 +62,10 @@ export const EpisodesTable = ({
                   className="podcast-detail-episodes-episode-link"
                   onClick={() => {
                     start(`Navigating to episode ${ep.title}`)
+                    localStorage.setItem(String(ep.id), String(ep.url))
                   }}
                   href={`/podcast/${podcastId}/episode/${ep.id}`}
+                  title={`${t('go_to')} ${t('episode_detail')} ${ep.title}`}
                 >
                   {ep.title}
                 </Link>

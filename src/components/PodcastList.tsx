@@ -1,16 +1,22 @@
 'use client'
 import { Podcast } from '@/components/Podcast'
-import { TopPodcast } from '@/services/podcasts'
 
+/**
+ * Renders a list of podcasts using the provided filtered podcast data.
+ *
+ * @param podcastsFiltered - An array of `TopPodcast` objects to display.
+ * @returns A React element containing the list of podcasts, or nothing if the array is empty.
+ */
 const PodcastList = ({
   podcastsFiltered
 }: {
   podcastsFiltered: TopPodcast[]
 }) => (
   <div className="podcasts-container">
-    {podcastsFiltered.map((podcast: TopPodcast) => (
-      <Podcast key={podcast.id} podcast={podcast} />
-    ))}
+    {podcastsFiltered.length > 0 &&
+      podcastsFiltered.map((podcast: TopPodcast) => (
+        <Podcast key={podcast.id} podcast={podcast} />
+      ))}
   </div>
 )
 

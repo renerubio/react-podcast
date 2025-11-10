@@ -2,13 +2,6 @@
 
 import { createContext, useContext, useState } from 'react'
 
-type NavigationCtx = {
-  loading: boolean
-  start: (message?: string) => void
-  stop: () => void
-  message?: string
-}
-
 const Ctx = createContext<NavigationCtx | null>(null)
 
 export function NavigationProvider({
