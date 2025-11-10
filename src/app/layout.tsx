@@ -1,7 +1,7 @@
 import AppHeader from '@/components/AppHeader'
-import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 import { NavigationProvider } from '@/context/NavigationContext'
 import { t } from '@/src/i18nConfig'
+import '@/styles/components.css'
 import '@/styles/globals.css'
 import '@/styles/skeletons.css'
 import type { Metadata } from 'next'
@@ -17,12 +17,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
+    <html lang="en">
       <body>
         <NavigationProvider>
           <AppHeader />
           {children}
-          <ServiceWorkerRegister />
         </NavigationProvider>
       </body>
     </html>

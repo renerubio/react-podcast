@@ -9,7 +9,6 @@ export async function GET(req: Request) {
 
   try {
     const res = await fetch(target, {
-      // Evita cachear para desarrollo
       cache: 'no-store',
       headers: { 'User-Agent': 'Mozilla/5.0 (RAG Fetch Proxy)' }
     })
@@ -18,7 +17,7 @@ export async function GET(req: Request) {
     return new NextResponse(text, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin': '*' // tu respuesta sí permite CORS
+        'Access-Control-Allow-Origin': '*'
       }
     })
   } catch (err: any) {

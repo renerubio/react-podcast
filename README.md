@@ -29,17 +29,16 @@ A single-page application for browsing and listening to music podcasts. Built wi
 - **Framework**: Next.js 16 (Turbopack)
 - **UI**: React 19 (no component libraries; custom CSS)
 - **Language**: TypeScript (strict)
-- **Formatting/Linting**: Prettier + ESLint 9
-- **State**: React Context API (as required)
-- **Testing**: Vitest + Testing Library (see below)
-- **Data Sources**:
-  - Top 100: `https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json`
-  - Podcast detail/episodes: `https://itunes.apple.com/lookup?id=<ID>&media=podcast&entity=podcastEpisode&limit=20`
-  - CORS helper if needed: `https://allorigins.win` (or a Next API proxy route)
+- **State Management**: React Context API
+- **Testing**: Vitest + Testing Library
+- **Styling**: Custom CSS with color variables for uniformity
+- **Caching**: LocalStorage with TTL (Time-to-Live)
+- **Linting/Formatting**: ESLint 9 + Prettier
+- **Git Hooks**: Husky for enforcing branch naming and commit conventions
 
 ## Architecture
 
-**Layered approach** for clarity and maintainability:
+The application follows a layered architecture for clarity and maintainability:
 
 ```
 UI (Components & Pages)
@@ -53,31 +52,36 @@ UI (Components & Pages)
 └─ Cache (client storage with TTL + background revalidation)
 ```
 
-- **UI**: three pages (Home, Podcast Detail, Episode Detail) + small reusable components (sidebar, list/table, audio player, top-right loading indicator).
-- **State**: Context API for cross-cutting concerns (e.g., navigation/loading indicator, search filter state).
-- **Hooks**: data hooks encapsulate fetch logic, caching, and stale-while-revalidate behavior.
-- **Services**: isolated functions to fetch/transform data (RSS/JSON parsing, mapping to typed models).
-- **Cache**: client-side storage (e.g., `localStorage`) with **24h TTL**, plus background revalidation to keep data fresh without blocking UI.
+### Key Decisions
 
-**Mermaid diagram (high-level):**
+Initially, the project used a Service Worker for caching. However, due to the complexity of managing cache invalidation and ensuring consistent behavior across all views, we transitioned to using **LocalStorage**. This approach allows us to:
 
-```mermaid
-flowchart TD
-    A[User] -->|Clicks/Routes| B[UI Pages & Components]
-    B --> C[Context (Loading/Filter)]
-    B --> D[Custom Hooks]
-    D --> E[Services (Fetch + Transform)]
-    E --> F[Cache (localStorage, TTL 24h)]
-    E --> G[External APIs (Apple RSS/Lookup, AllOrigins/Next API)]
-    F --> D
-    C --> B
-```
+- Control the timing of fetch requests and cache updates.
+- Access LocalStorage directly within the client-side rendering (CSR) lifecycle.
+- Implement a TTL system to manage data expiration.
+
+### TTL System
+
+The TTL system adds metadata to cached items in LocalStorage, including:
+
+- `timestamp`: The time the data was cached.
+- `ttl`: The time-to-live duration (e.g., 24 hours).
+
+When accessing cached data, the application checks these properties to determine if the data is still valid or needs to be re-fetched.
+
+### Styling
+
+For uniformity, the application uses CSS variables for colors. This ensures consistency across components and simplifies theming.
+
+### Responsiveness
+
+The application includes minimal responsive design to ensure usability on different screen sizes. Further improvements are planned in future iterations.
 
 ## Data & Caching
 
 - **Top 100 podcasts** and **Podcast detail/episodes** are cached **on the client** for **24 hours**.
-- When cached data exists, we show it immediately and **revalidate in the background**.
-- If CORS blocks RSS or episode HTML, we rely on **AllOrigins** or a **Next API route proxy**.
+- When cached data exists, it is displayed immediately, and a background revalidation fetches fresh data.
+- The caching logic is implemented in custom hooks, ensuring separation of concerns.
 
 ## Views
 
@@ -99,29 +103,39 @@ flowchart TD
 - **Production**: `next build` + `next start` — optimized/minified output (Turbopack).
 - No hash-based routing; clean URLs by default in Next.
 
+### Scripts in `package.json`
+
+- `dev`: Starts the development server.
+- `build`: Builds the application for production.
+- `start`: Starts the production server.
+- `lint`: Runs ESLint to check for code quality issues.
+- `test`: Runs unit tests using Vitest.
+
 ## Quality
 
 - **ESLint 9 + Prettier** configured; warnings treated seriously (console kept clean).
-- **SOLID** and separation of concerns via layers.
+- **SOLID** principles and separation of concerns via layers.
 - **TypeScript strict**: complete typing for data models and services.
 - **No UI libraries**: components built from scratch, responsive with custom CSS.
 
 ## Git Workflow
 
-- Branch naming enforced via hook: `<type>/<slug>` (e.g., `feat/filter`, `fix/build`).
-- **Conventional commits**.
-- **Tags**: used to mark milestones (e.g., MVP Home list, Filter added, Detail page, Episode page, Final polishing). Tags allow reviewers to step through the project evolution in GitHub’s Releases and compare changes between milestones.
+- **Husky** is used to enforce branch naming conventions and commit message standards.
+- Branch naming: `<type>/<slug>` (e.g., `feat/filter`, `fix/build`).
+- **Conventional commits**: Ensures clear and structured commit messages.
+- **Tags**: Used to mark milestones (e.g., MVP Home list, Filter added, Detail page, Episode page, Final polishing). Tags allow reviewers to step through the project evolution in GitHub’s Releases and compare changes between milestones.
 
 ## Testing
 
-- If tests are requested, we use **Vitest** with **@testing-library/react** and **jsdom**:
-  - Unit tests for hooks and small components.
-  - Rendering tests for the three pages (loader states, list rendering, filtering, episode navigation).
-  - Keep tests fast and focused; no E2E required for this scope.
+Testing will be implemented in future iterations. The plan includes:
+
+- Unit tests for hooks and small components.
+- Rendering tests for the three pages (loader states, list rendering, filtering, episode navigation).
+- Using **Vitest** with **@testing-library/react** and **jsdom**.
 
 ## Windows & Line Endings
 
-- Reviewers may use Windows. The project can align to **CRLF** line endings to match their environment.
+- The project aligns to **CRLF** line endings to match Windows environments.
 - Ensure editor settings and formatter are consistent (see `.prettierrc` and editor configuration).
 
 ## Roadmap & Milestones

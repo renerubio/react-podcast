@@ -1,4 +1,7 @@
+import Card from '@/components/Card'
 import { SKELETON_PODCASTS_LENGTH } from '@/utils/constants'
+
+export const SkeletonLoader = () => <div className="skeleton-loader"></div>
 
 export const SkeletonPodcastItem = () => (
   <div className="skeleton-loader-podcast"></div>
@@ -29,50 +32,41 @@ export const SkeletonHomePage = ({
   </>
 )
 
-type Props = { rows?: number }
+export const SkeletonDetailSidebar = () => (
+  <div className="skeleton-loader-sidebar"></div>
+)
 
-export const SkeletonPodcastDetail = ({ rows = 10 }: Props) => {
-  const items = Array.from({ length: rows })
+export const SkeletonDetailTable = ({
+  skeleton_rows = 30
+}: {
+  skeleton_rows?: number
+}) => (
+  <div className="podcast-detail-episodes">
+    <Card className="podcast-detail-episodes-title" variant="header">
+      <SkeletonLoader />
+    </Card>
+    <Card>
+      {Array.from({ length: skeleton_rows }).map((_, i) => (
+        <SkeletonLoader key={i} />
+      ))}
+    </Card>
+  </div>
+)
 
-  return (
-    <main className="skeleton-podcast-container skeleton-podcast-detail">
-      {/* Sidebar card */}
-      <div className="podcast-detail-resume skeleton-card">
-        <div className="skeleton-logo skeleton-block" />
-        <div className="skeleton-title skeleton-block" />
-        <div className="skeleton-subtitle skeleton-block" />
-        <div className="skeleton-section-label skeleton-block" />
-        <div className="skeleton-paragraph skeleton-block" />
-        <div className="skeleton-paragraph-short skeleton-block" />
-      </div>
+export const SkeletonPodcastDetail = () => (
+  <main className="podcast-detail-container">
+    <SkeletonDetailSidebar />
+    <SkeletonDetailTable />
+  </main>
+)
 
-      {/* Episodes table */}
-      <section className="skeleton-episodes">
-        <div className="skeleton-episodes-header skeleton-block" />
-        <div className="skeleton-table">
-          <div className="skeleton-thead">
-            <div className="skeleton-th">Title</div>
-            <div className="skeleton-th skeleton-col-date">Date</div>
-            <div className="skeleton-th skeleton-col-dur">Duration</div>
-          </div>
+export const SkeletonAudioPlayer = () => (
+  <div className="skeleton-audio-player"></div>
+)
 
-          <div className="skeleton-tbody">
-            {items.map((_, i) => (
-              <div className="skeleton-tr" key={i}>
-                <div className="skeleton-td">
-                  <div className="skeleton-line skeleton-w-70 skeleton-block" />
-                </div>
-                <div className="skeleton-td skeleton-col-date">
-                  <div className="skeleton-line skeleton-w-40 skeleton-block" />
-                </div>
-                <div className="skeleton-td skeleton-col-dur">
-                  <div className="skeleton-line skeleton-w-30 skeleton-block" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </main>
-  )
-}
+export const SkeletonEpisodeDetail = () => (
+  <main className="podcast-detail-container">
+    <SkeletonDetailSidebar />
+    <SkeletonAudioPlayer />
+  </main>
+)

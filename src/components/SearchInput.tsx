@@ -1,18 +1,15 @@
 'use client'
 
 import { t } from '@/src/i18nConfig'
-
-type Props = {
-  value: string
-  onChange: (v: string) => void
-  disable?: boolean
-}
-
 export default function SearchInput({
   value,
   onChange,
   disable = false
-}: Props) {
+}: {
+  value: string
+  onChange: (v: string) => void
+  disable?: boolean
+}) {
   return (
     <div className="filter-podcast-search-input-container">
       <input

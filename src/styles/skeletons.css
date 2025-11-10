@@ -1,4 +1,43 @@
 /* Skeleton Loader Styles */
+.skeleton-loader {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  margin: 5px auto;
+  background-color: var(--color-skeleton-dark);
+}
+
+.skeleton-loader:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-repeat: no-repeat;
+
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  background-size: 64.5px 100%;
+
+  background-position: 0 0;
+
+  animation: skeleton-animation 2000ms infinite;
+}
+
+@keyframes skeleton-animation {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Skeleton Podcast Styles */
 .skeleton-loader-podcast {
   position: relative;
   height: 210px;
@@ -116,57 +155,57 @@
   }
 }
 
-/* Skeleton Podcast Detail */
-.skeleton-podcast-detail {
+/* Skeleton Podcast Detail Sidebar */
+.skeleton-loader-sidebar {
   position: relative;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 24px;
-  padding: 16px;
+  height: 265px;
 }
-
-/* Shimmer blocks */
-.skeleton-block {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-skeleton-light);
-  border-radius: 6px;
-}
-.skeleton-block::after {
+.skeleton-loader-sidebar:after {
   content: '';
-  position: absolute;
-  inset: 0;
   display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
   background-repeat: no-repeat;
   background-image:
     linear-gradient(
       90deg,
-      rgba(var(--color-white-rgb), 0) 0%,
-      var(--color-skeleton-shimmer) 50%,
-      rgba(var(--color-white-rgb), 0) 100%
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
     ),
-    linear-gradient(var(--color-skeleton-dark) 31px, transparent 0),
-    linear-gradient(var(--color-skeleton-dark) 31px, transparent 0),
-    linear-gradient(var(--color-skeleton-bg) 100%, transparent 0);
+    linear-gradient(#aaaaaa 122px, transparent 0),
+    linear-gradient(#aaaaaa 16px, transparent 0),
+    linear-gradient(#aaaaaa 11px, transparent 0),
+    linear-gradient(#aaaaaa 29px, transparent 0),
+    linear-gradient(#ffffff 100%, transparent 0);
   background-size:
-    114.5px 100%,
-    44px 31px,
-    144px 31px,
+    106px 100%,
+    180px 122px,
+    180px 16px,
+    180px 11px,
+    180px 29px,
     100% 100%;
   background-position:
-    -150% 0,
-    11px 8px,
-    71px 8px,
+    0 0,
+    16px 16px,
+    16px 149.975029px,
+    16px 183.4999771px,
+    16px 212px,
     0 0;
-  animation: skeleton-shimmer 2000ms linear infinite;
+  animation: skeleton-loader-sidebar-animation 1000ms infinite;
 }
 
-@keyframes skeleton-shimmer {
+@keyframes skeleton-loader-sidebar-animation {
   to {
     background-position:
-      150% 0,
-      11px 8px,
-      71px 8px,
+      100% 0,
+      16px 16px,
+      16px 149.975029px,
+      16px 183.4999771px,
+      16px 212px,
       0 0;
   }
 }
@@ -179,4 +218,59 @@
   border: 1px solid var(--color-skeleton-border);
   border-radius: 8px;
   background: var(--color-skeleton-bg);
+}
+
+/* Skeleton Episode Audio Player */
+.skeleton-audio-player {
+  position: relative;
+  height: 320px;
+}
+.skeleton-audio-player:after {
+  content: '';
+  display: block;
+  width: 500px;
+  height: 320px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(#aaaaaa 40px, transparent 0),
+    linear-gradient(#aaaaaa 134px, transparent 0),
+    linear-gradient(#aaaaaa 11px, transparent 0),
+    linear-gradient(#aaaaaa 16px, transparent 0),
+    linear-gradient(#ffffff 100%, transparent 0);
+  background-size:
+    265px 100%,
+    270px 40px,
+    496px 134px,
+    404px 11px,
+    496px 16px,
+    100% 100%;
+  background-position:
+    0 0,
+    16px 16px,
+    16px 74px,
+    16px 225.9999886px,
+    16px 283px,
+    0 0;
+  animation: skeleton-audio-player-animation 2000ms infinite;
+}
+
+@keyframes skeleton-audio-player-animation {
+  to {
+    background-position:
+      100% 0,
+      16px 16px,
+      16px 74px,
+      16px 225.9999886px,
+      16px 283px,
+      0 0;
+  }
 }

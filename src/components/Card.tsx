@@ -1,16 +1,3 @@
-interface CardProps {
-  children: React.ReactNode
-  className?: string
-  variant?:
-    | 'main'
-    | 'article'
-    | 'section'
-    | 'aside'
-    | 'nav'
-    | 'header'
-    | 'footer'
-}
-
 /**
  * Renders a customizable card component that wraps its children in a semantic HTML tag
  * specified by the `variant` prop (e.g., 'section', 'article', etc.).

@@ -1,5 +1,4 @@
 import { useLoading } from '@/context/NavigationContext'
-import { TopPodcast } from '@/services/podcasts'
 import { t } from '@/src/i18nConfig'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,8 +9,8 @@ import Link from 'next/link'
  * @param podcast - The podcast data to display, of type `TopPodcast`.
  * @returns A React component displaying the podcast's image, title, and author.
  *
- * The component uses `useLoading` to indicate navigation loading state,
- * and applies visual effects on mouse enter and leave events.
+ * The component uses `useLoading` to show a loading state when navigating,
+ * and applies visual effects on mouse enter and leave.
  */
 export const Podcast = ({ podcast }: { podcast: TopPodcast }) => {
   const { start } = useLoading()
@@ -20,6 +19,7 @@ export const Podcast = ({ podcast }: { podcast: TopPodcast }) => {
     <Link
       key={podcast.id}
       href={`/podcast/${podcast.id}`}
+      title={`${t('go_to')} ${t('podcast_detail')} ${podcast.title} ${t('by')} ${podcast.author}`}
       onClick={() => {
         start('Navigating to podcast page')
       }}
