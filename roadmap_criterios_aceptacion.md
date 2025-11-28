@@ -107,6 +107,88 @@ Autor: René · Última actualización: 04-nov-2025
 
 ---
 
+### 9) `screen-global@m1.1-architecture` — Refactorización de arquitectura _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] Separación de lógica en capas: componentes, hooks reutilizables y servicios.
+- [] Gestión de caché abstraída en servicios independientes.
+- [] Componentes refactorizados para cumplir con el principio de responsabilidad única (SRP).
+- [] Servicios distribuidos en módulos según su responsabilidad.
+- [] Explicación de la arquitectura y decisiones en el README.
+
+---
+
+### 10) `screen-global@m1.2-styles` — Refactorización de estilos _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] CSS modularizado por componentes.
+- [] Uso de variables CSS para colores, tamaños y otros valores reutilizables.
+- [] Gestión de estados visuales mejorada (hover, focus, active, etc.).
+- [] Diseño responsive revisado y optimizado.
+- [] Consola limpia de errores relacionados con estilos.
+
+---
+
+### 11) `screen-global@m1.3-performance` — Optimización de rendimiento _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] Eliminación de renders innecesarios mediante control de dependencias en `useEffect`.
+- [] Uso de memoización (`React.memo`, `useMemo`, `useCallback`) donde sea necesario.
+- [] Análisis de rendimiento con React DevTools y ajustes realizados.
+- [] Explicación de las optimizaciones en el README.
+
+---
+
+### 12) `screen-global@m1.4-tests` — Implementación de tests _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] Tests unitarios para componentes clave.
+- [] Tests de integración para flujos principales (Home, Detalle Podcast, Detalle Episodio).
+- [] Ejemplo de test documentado en el README.
+- [] Todos los tests pasan correctamente.
+- [] Cobertura mínima del 80%.
+
+---
+
+### 13) `screen-global@m1.5-readme` — Documentación completa _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] README actualizado con:
+  - Tecnologías utilizadas.
+  - Arquitectura del proyecto y patrones aplicados.
+  - Decisiones de diseño y justificación.
+  - Ejemplo de test.
+  - Estrategia de caché y optimización.
+- [] Explicación de la modularidad y división de componentes.
+- [] Uso de herramientas de gestión de código (commits, ramas, etc.) documentado.
+- [] Consola limpia de errores y warnings.
+
+---
+
+### 14) `screen-global@final-v1.1` — Release final mejorada _(Post-release)_
+
+**Criterios de aceptación**
+
+- [] Cumple con todos los criterios de los hitos anteriores.
+- [] Diseño fiel al propuesto, completamente responsive.
+- [] Uso de ContextAPI para la gestión de estado.
+- [] Tipado completo con TypeScript en toda la aplicación.
+- [] Componentes creados desde cero, sin librerías externas.
+- [] Modo desarrollo y producción configurados correctamente:
+  - Desarrollo: assets no minimizados.
+  - Producción: assets concatenados y minimizados.
+- [] Aplicación desplegada y accesible.
+- [] Uso de SSR con Next.js.
+- [] Variables CSS implementadas.
+- [] Consola limpia de errores y warnings.
+
+---
+
 ## Notas de validación
 
 - Verificación de caché y revalidación: DevTools → Application (Local Storage) y Network.

@@ -29,9 +29,10 @@ interface IEpisode {
   date: string
   duration: number | string
   episodes?: any
+  description?: string
 }
 
-type TopPodcast = {
+interface ITop100Podcasts {
   id: string
   title: string
   author: string

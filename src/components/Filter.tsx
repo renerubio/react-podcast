@@ -17,7 +17,7 @@ const Filter = ({
 }: {
   query: string
   setQuery: (query: string) => void
-  filtered: any[]
+  filtered: ITop100Podcasts[]
 }) => (
   <div className="filter-podcast-container">
     <span className="filter-podcast-number-results">{filtered.length}</span>

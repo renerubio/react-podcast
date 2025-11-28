@@ -226,6 +226,8 @@
   font-size: smaller;
   color: var(--color-subtitle);
   font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Episodes */

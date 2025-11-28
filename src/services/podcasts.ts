@@ -7,15 +7,15 @@ const APPLE_PODCAST_LOOKUP_URL =
 export const REVALIDATE_SECONDS = 60 * 60 * 24 // 24h
 
 /**
- * Fetches the top 100 podcasts from the Apple Podcasts API and returns them as an array of `TopPodcast` objects.
+ * Fetches the top 100 podcasts from the Apple Podcasts API and returns them as an array of `ITop100Podcasts` objects.
  *
  * The function performs a network request to the Apple Top 100 Podcasts endpoint, processes the response,
  * and maps the resulting data into a simplified format suitable for application use.
  *
- * @returns {Promise<TopPodcast[]>} A promise that resolves to an array of `TopPodcast` objects.
+ * @returns {Promise<ITop100Podcasts[]>} A promise that resolves to an array of `ITop100Podcasts` objects.
  * @throws {Error} If the network request fails or returns a non-OK status.
  */
-export async function fetchTopPodcasts(): Promise<TopPodcast[]> {
+export async function fetchTopPodcasts(): Promise<ITop100Podcasts[]> {
   // TEST Incremental Static Regeneration (ISR):
   //  console.info('[fetchTopPodcasts] running (network or regeneration)')
 

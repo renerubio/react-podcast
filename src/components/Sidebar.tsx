@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
-const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
+const Sidebar = ({ podcastDetail }: { podcastDetail: IPodcastDetail }) => {
   const { podcastId } = useParams<{
     podcastId: string
   }>()
@@ -34,7 +34,7 @@ const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
         <p className="podcast-detail-title-description">{t('description')}</p>
         <p
           className="podcast-detail-description"
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: description as string }}
         />
       </Card>
     </Link>

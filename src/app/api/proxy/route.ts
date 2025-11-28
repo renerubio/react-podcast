@@ -20,8 +20,8 @@ export async function GET(req: Request) {
         'Access-Control-Allow-Origin': '*'
       }
     })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[Proxy error]', err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 })
   }
 }
