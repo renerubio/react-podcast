@@ -1,15 +1,7 @@
-type Messages = {
-  [key: string]: string
-}
-
-type NavigationCtx = {
-  loading: boolean
-  start: (message?: string) => void
-  stop: () => void
-  message?: string
-}
-
-interface CardProps {
+/**
+ * Props accepted by the shared `Card` component to control semantic variant and styling.
+ */
+export interface ICardProps {
   children: React.ReactNode
   className?: string
   variant?:
@@ -22,16 +14,23 @@ interface CardProps {
     | 'footer'
 }
 
-interface IEpisode {
+/**
+ * Episode model normalized from feeds and lookup responses.
+ */
+export interface IEpisode {
   id: string | number
   title: string
   url?: string
   date: string
   duration: number | string
   episodes?: any
+  description?: string
 }
 
-type TopPodcast = {
+/**
+ * Minimal data shape used to render the Top 100 podcasts list.
+ */
+export interface ITop100Podcasts {
   id: string
   title: string
   author: string
@@ -39,7 +38,10 @@ type TopPodcast = {
   summary?: string
 }
 
-interface IPodcastDetail {
+/**
+ * Full podcast detail returned by the lookup API and enriched with episodes.
+ */
+export interface IPodcastDetail {
   wrapperType: string
   kind: string
   artistId: number
@@ -59,7 +61,7 @@ interface IPodcastDetail {
   contentAdvisoryRating: string
   country: string
   currency: string
-  episodes: object[]
+  episodes: IEpisode[]
   feedUrl: string
   genreIds: string[]
   genres: string[]
@@ -73,13 +75,11 @@ interface IPodcastDetail {
   trackPrice: number
   trackTimeMillis: number
   trackViewUrl: string
-  description?: string
 }
 
-type AppleEntry = {
-  id?: { attributes?: { ['im:id']?: string } }
-  ['im:name']?: { label?: string }
-  ['im:artist']?: { label?: string }
-  ['im:image']?: Array<{ label?: string }>
-  summary?: { label?: string }
+/**
+ * Podcast detail with parsed description injected from the RSS feed.
+ */
+export interface IParsedPodcastDetail extends IPodcastDetail {
+  description: string
 }

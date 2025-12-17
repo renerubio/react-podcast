@@ -1,11 +1,18 @@
 'use client'
-import Card from '@/components/Card'
+import Card from '@/components/ui/Card'
+import { useFeedback } from '@/hooks/useFeedback'
 import { t } from '@/src/i18nConfig'
+import { IParsedPodcastDetail } from '@/utils/interfaces'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
-const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
+const Sidebar = ({
+  podcastDetail
+}: {
+  podcastDetail: IParsedPodcastDetail
+}) => {
+  const { newMessage } = useFeedback()
   const { podcastId } = useParams<{
     podcastId: string
   }>()
@@ -18,6 +25,7 @@ const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
       href={`/podcast/${podcastId}`}
       className="podcast-detail-resume-link"
       title={`${t('go_to')} ${t('podcast_detail')} ${trackName}`}
+      onClick={() => newMessage(`${t('loading_podcast_details')} ${trackName}`)}
     >
       <Card className="podcast-detail-resume">
         <Image
@@ -25,6 +33,7 @@ const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
           alt={collectionName}
           width={160}
           height={160}
+          loading="eager"
           className="podcast-detail-image"
         />
         <hr />
@@ -34,7 +43,7 @@ const Sidebar = ({ podcastDetail }: { podcastDetail: any }) => {
         <p className="podcast-detail-title-description">{t('description')}</p>
         <p
           className="podcast-detail-description"
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: description as string }}
         />
       </Card>
     </Link>

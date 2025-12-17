@@ -1,152 +1,218 @@
 # React Podcasts SPA (Next.js 16)
 
-A single-page application for browsing and listening to music podcasts. Built with **Next.js 16** and **React 19**, operating with SPA-style client navigation while leveraging Next's modern build pipeline (Turbopack).
+Single-page experience to browse and listen to music podcasts. Built with **Next.js 16** and **React 19**, using client navigation and Turbopack.
 
 ## Table of Contents
 
 - [Goals](#goals)
+- [Release Status](#release-status)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
+- [Architecture Decisions](#architecture-decisions)
 - [Data & Caching](#data--caching)
+- [Responsive & Accessibility](#responsive--accessibility)
 - [Views](#views)
 - [Development / Production](#development--production)
 - [Quality](#quality)
+- [Performance](#performance)
 - [Git Workflow](#git-workflow)
+- [Tags & Releases](#tags--releases)
 - [Testing](#testing)
 - [Windows & Line Endings](#windows--line-endings)
 - [Roadmap & Milestones](#roadmap--milestones)
+- [Naming Conventions](#naming-conventions)
+- [Code Naming Conventions](#code-naming-conventions)
 
 ## Goals
 
 - 3 views: **Home**, **Podcast Detail**, **Episode Detail**.
-- **SPA behavior**: client-side transitions without full document reloads.
-- **Clean URLs**, no hash-based routing.
-- **Public repository** with progressive commits and **tags** for milestones.
-- **Indicator** in the top-right corner while a client navigation is in progress.
+- **SPA behavior**: client-side transitions without full reloads.
+- **Clean URLs**, no hash routing.
+- **Loading indicator** top-right during navigation.
+- **Public repo** with incremental commits and **tags** for milestones.
+
+## Release Status
+
+- Current target: `screen-global@final-v1.0`; Home, Podcast Detail, and Episode Detail are complete and stable.
+- `next build` / `next start` pass locally; ESLint/TypeScript clean.
+- README covers stack, layered architecture, cache decisions, and navigation approach (acceptance criteria 8).
+- Responsive checks on mobile/desktop breakpoints; no external UI kits.
+- Console kept free of errors/warnings during navigation.
 
 ## Tech Stack
 
 - **Framework**: Next.js 16 (Turbopack)
 - **UI**: React 19 (no component libraries; custom CSS)
 - **Language**: TypeScript (strict)
-- **State Management**: React Context API
+- **State**: React Context API
 - **Testing**: Vitest + Testing Library
-- **Styling**: Custom CSS with color variables for uniformity
-- **Caching**: LocalStorage with TTL (Time-to-Live)
-- **Linting/Formatting**: ESLint 9 + Prettier
-- **Git Hooks**: Husky for enforcing branch naming and commit conventions
+- **Styling**: Custom CSS with color variables
+- **Caching**: LocalStorage with TTL
+- **Lint/Format**: ESLint 9 + Prettier
+- **Git Hooks**: Husky for branch/commit validation
 
 ## Architecture
 
-The application follows a layered architecture for clarity and maintainability:
+### Layers and structure
 
-```
-UI (Components & Pages)
-│
-├─ State (React Context)
-│
-├─ Hooks (custom hooks for data fetching, cache, filters)
-│
-├─ Services (API clients: iTunes RSS / lookup, proxy)
-│
-└─ Cache (client storage with TTL + background revalidation)
-```
+- Pages in `src/app`; reusable components in `src/components`.
+- View logic and hooks in `src/hooks`.
+- Data services in `src/services`.
+- Utilities/normalization in `src/utils`; i18n config in `src/i18nConfig.ts` and translations in `src/locale`.
+- Global contexts in `src/context`; styles in `src/styles`.
 
-### Key Decisions
+### Data flow
 
-Initially, the project used a Service Worker for caching. However, due to the complexity of managing cache invalidation and ensuring consistent behavior across all views, we transitioned to using **LocalStorage**. This approach allows us to:
+1. Pages render layout and trigger hooks (e.g., `usePodcastDetailPage`).
+2. Hooks compose UI state, cache, and call services (`fetchTopPodcasts`, `fetchPodcastById`, `fetchParsedFeed`).
+3. Services fetch (via proxy when needed) and hand results to normalizers (`parsePodcastDetail`, `parseEpisodesFromFeed`).
+4. Components receive normalized data via props and stay presentational.
 
-- Control the timing of fetch requests and cache updates.
-- Access LocalStorage directly within the client-side rendering (CSR) lifecycle.
-- Implement a TTL system to manage data expiration.
+### Services and effects
 
-### TTL System
+- Services run controlled effects only: network `fetch` plus parsing (DOMParser in `fetchParsedFeed`).
+- Remaining business logic is pure/testable; no unexpected side effects.
 
-The TTL system adds metadata to cached items in LocalStorage, including:
+### Caching and TTL
 
-- `timestamp`: The time the data was cached.
-- `ttl`: The time-to-live duration (e.g., 24 hours).
+- Client cache in LocalStorage with metadata `{ timestamp, ttl }` per key (`top-podcasts`, `podcast-${id}`).
+- Immediate read for fast UX; silent revalidation when expired (TTL 24h).
+- Decision: no Service Worker to keep invalidation simple and deterministic in CSR.
 
-When accessing cached data, the application checks these properties to determine if the data is still valid or needs to be re-fetched.
+### Navigation and UX
 
-### Styling
+- Client transitions with Next 16; clean routes, no hash.
+- Loading indicator top-right via global context.
+- Sidebar reused across detail and episode pages to keep access to the podcast.
 
-For uniformity, the application uses CSS variables for colors. This ensures consistency across components and simplifies theming.
+### Styling and key decisions
 
-### Responsiveness
+- Custom CSS with variables; no UI libraries for full control.
+- Key choices: LocalStorage + TTL instead of SW; DOMParser for XML feeds on client; Context API for feedback/loading.
 
-The application includes minimal responsive design to ensure usability on different screen sizes. Further improvements are planned in future iterations.
+## Architecture Decisions
+
+- **Service purity**: Fetchers (`fetchPodcasts`, `fetchPodcastById`, `fetchParsedFeed`) keep side effects limited to network I/O plus parsing; proxy protected by allowlist + timeout (`/api/proxy`).
+- **Caching strategy**: LocalStorage TTL (24h) for top list and per-podcast payloads; cache orchestration lives in services (`services/cache/topPodcasts.ts`, `services/cache/podcast.ts`) with shared TTL helpers.
+- **Layer split**: Pages (routing/layout) -> view components (presentation) -> hooks (state, cache, effects) -> services (fetch/parse) -> utils (normalize/format). SRP enforced in UI blocks.
+- **Error policy**: Network errors surface via feedback context and console; UI falls back to skeletons/last cached data when present.
+- **Navigation UX**: Loading indicator driven by `LoadingContext`; feedback messages via `FeedbackContext`; sidebar reused between detail and episode.
 
 ## Data & Caching
 
-- **Top 100 podcasts** and **Podcast detail/episodes** are cached **on the client** for **24 hours**.
-- When cached data exists, it is displayed immediately, and a background revalidation fetches fresh data.
-- The caching logic is implemented in custom hooks, ensuring separation of concerns.
+- **Top 100** and **podcast detail/episodes** cached on client for 24h.
+- If cache exists, show instantly; revalidate in background.
+- Cache logic lives in hooks, separated from components.
+
+## Responsive & Accessibility
+
+- Layout verified on mobile and desktop; grids wrap without horizontal scroll and cards stack vertically on small screens.
+- `next/image` used with descriptive alt text; table headers and `aria-label` attributes added for assistive tech.
+- Inputs and links include labels/titles; focus states preserved by custom CSS.
+- Styles modularized per view (header, podcasts grid, podcast detail) with shared CSS variables and explicit hover/focus states.
 
 ## Views
 
 1. **Home (`/`)**
-   - Displays Top 100 podcasts (image, title, author).
-   - **Instant filter** by text (title+author).
-   - Navigates to podcast detail on click.
+   - Top 100 list (image, title, author).
+   - Instant text filter (title + author).
+   - Navigates to podcast detail.
 2. **Podcast Detail (`/podcast/{podcastId}`)**
    - **Sidebar**: image, title, author, description.
-   - **Main**: episode count + list (title, date, duration).
-   - Clicking an episode title routes to its detail view.
+   - **Main**: total episodes and table (title, date, duration).
+   - Episode click navigates to detail.
 3. **Episode Detail (`/podcast/{podcastId}/episode/{episodeId}`)**
-   - **Same sidebar** as podcast detail (image, title, author) — all link back to the podcast.
-   - **Main**: title, **HTML description rendered**, **native HTML5 audio player**.
+   - **Sidebar** reused (links back to podcast).
+   - **Main**: title, rendered HTML description, native HTML5 audio.
 
 ## Development / Production
 
-- **Development**: `next dev` — unminified, fast HMR.
-- **Production**: `next build` + `next start` — optimized/minified output (Turbopack).
-- No hash-based routing; clean URLs by default in Next.
+- **Development**: `next dev` for fast HMR, unminified.
+- **Production**: `next build` + `next start` for optimized assets.
+- Clean routes by default; no hash routing.
 
 ### Scripts in `package.json`
 
-- `dev`: Starts the development server.
-- `build`: Builds the application for production.
-- `start`: Starts the production server.
-- `lint`: Runs ESLint to check for code quality issues.
-- `test`: Runs unit tests using Vitest.
+- `dev`: start dev server.
+- `build`: production build.
+- `start`: production server.
+- `lint`: run ESLint.
+- `test`: run tests (Vitest).
 
 ## Quality
 
-- **ESLint 9 + Prettier** configured; warnings treated seriously (console kept clean).
-- **SOLID** principles and separation of concerns via layers.
-- **TypeScript strict**: complete typing for data models and services.
-- **No UI libraries**: components built from scratch, responsive with custom CSS.
+- ESLint 9 + Prettier; keep console clean.
+- SOLID and layered separation.
+- TypeScript strict on models and services.
+- No UI libraries; custom CSS and baseline responsive behavior.
+
+## Performance
+
+- Effects guarded by dependency arrays to avoid extra renders (e.g., filter memoization, podcast/episode fetching hooks).
+- Memoization (`useMemo`/`useCallback`) applied to filters, episode lookup, and click handlers to prevent rerenders across large lists.
+- Client cache (localStorage + TTL) and skeleton fallbacks reduce network hits and keep navigation snappy.
+- Perf profiling (Chrome DevTools): Home LCP ~0.78s, CLS 0.0, INP 24ms (green); Podcast detail LCP ~0.78s, CLS 0.01, INP 32ms (green). With cache, timings improve further.
+- Next steps: profile with React DevTools and capture findings to validate render timings under load.
 
 ## Git Workflow
 
-- **Husky** is used to enforce branch naming conventions and commit message standards.
-- Branch naming: `<type>/<slug>` (e.g., `feat/filter`, `fix/build`).
-- **Conventional commits**: Ensures clear and structured commit messages.
-- **Tags**: Used to mark milestones (e.g., MVP Home list, Filter added, Detail page, Episode page, Final polishing). Tags allow reviewers to step through the project evolution in GitHub’s Releases and compare changes between milestones.
+- Husky enforces branch and commit naming.
+- Branches: `<type>/<slug>` (e.g., `feat/filter`, `fix/build`).
+- Conventional commits.
+- Tags for milestones (Home, Filter, Detail, Episode, Final).
+
+## Tags & Releases
+
+- Pattern: `screen-[view]@m[n](-descriptor)` for milestones; `screen-global@final-vX.Y.Z` for stable releases.
+- Planned tags: `screen-home@m1`, `screen-home@m2-filter`, `screen-podcast@m1`, `screen-episode@m1`, `screen-global@final-v1.0`.
+- Release notes capture cache strategy, proxy allowlist/timeouts, and navigation UX decisions.
 
 ## Testing
 
-Testing will be implemented in future iterations. The plan includes:
-
-- Unit tests for hooks and small components.
-- Rendering tests for the three pages (loader states, list rendering, filtering, episode navigation).
-- Using **Vitest** with **@testing-library/react** and **jsdom**.
+- Plan: unit tests for hooks and small components.
+- Render tests for the three views (loaders, lists, filter, navigation).
+- Stack: **Vitest** + **@testing-library/react** + **jsdom**.
 
 ## Windows & Line Endings
 
-- The project aligns to **CRLF** line endings to match Windows environments.
-- Ensure editor settings and formatter are consistent (see `.prettierrc` and editor configuration).
+- Align to CRLF line endings for Windows environments.
+- Configure editor/formatter per `.prettierrc`.
 
 ## Roadmap & Milestones
 
-- M1: Home list + client cache (24h) + filter
-- M2: Podcast detail (sidebar + episodes list)
-- M3: Episode detail (HTML description + audio)
-- M4: Top-right route loading indicator
+- M1: Home + cache 24h + filter
+- M2: Podcast detail (sidebar + list)
+- M3: Episode detail (HTML + audio)
+- M4: Navigation loading indicator
 - M5: Polish, tests, README, tags
+
+## Naming Conventions
+
+| File/Element Type   | Naming Convention        | Example               |
+| ------------------- | ------------------------ | --------------------- |
+| React Components    | PascalCase               | `Podcast.tsx`         |
+| Next.js Pages       | PascalCase               | `PodcastHomePage.tsx` |
+| Contexts            | PascalCase               | `LoadingContext.tsx`  |
+| Custom Hooks        | camelCase (prefix `use`) | `useLoadingState.tsx` |
+| Utilities (helpers) | camelCase                | `utils.ts`            |
+| CSS Files           | camelCase                | `globals.css`         |
+
+## Code Naming Conventions
+
+| Code Element  | Naming Convention                | Example                          |
+| ------------- | -------------------------------- | -------------------------------- |
+| Variables     | camelCase                        | `podcastList`, `isLoading`       |
+| Functions     | camelCase                        | `fetchPodcasts`, `filterList`    |
+| Custom Hooks  | camelCase (prefix `use`)         | `usePodcastCache`                |
+| Types         | PascalCase                       | `Podcast`, `Episode`             |
+| Interfaces    | PascalCase (prefix `I` optional) | `PodcastDetail`, `IEpisode`      |
+| Enums         | PascalCase                       | `PodcastStatus`                  |
+| Constants     | UPPER_SNAKE_CASE                 | `CACHE_TTL`, `API_URL`           |
+| Props Objects | PascalCase (suffix `Props`)      | `PodcastProps`                   |
+| CSS Classes   | kebab-case                       | `podcast-list`, `sidebar-header` |
+| Test Files    | camelCase (suffix `.test.tsx`)   | `podcastDetail.test.tsx`         |
 
 ---
 
-**Author:** René  
+**Author:** Rene  
 **License:** MIT

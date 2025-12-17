@@ -1,4 +1,4 @@
-import Card from '@/components/Card'
+import Card from '@/components/ui/Card'
 import { SKELETON_PODCASTS_LENGTH } from '@/utils/constants'
 
 export const SkeletonLoader = () => <div className="skeleton-loader"></div>

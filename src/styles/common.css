@@ -1,0 +1,54 @@
+.card {
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--color-card-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.link-unstyled {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link-unstyled:hover,
+.link-unstyled:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.feedback-toast {
+  position: fixed;
+  top: 68px;
+  right: 20px;
+  background: var(--color-primary);
+  color: #fff;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 360px;
+  font-weight: 600;
+  animation:
+    toast-slide-in 0.25s ease,
+    toast-fade-out 0.3s ease forwards;
+  animation-delay: 0s, calc(var(--toast-duration, 5000ms) - 300ms);
+}
+
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-fade-out {
+  to {
+    opacity: 0;
+  }
+}

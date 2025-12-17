@@ -1,28 +1,40 @@
-import AppHeader from '@/components/AppHeader'
-import { NavigationProvider } from '@/context/NavigationContext'
+import AppHeader from '@/components/ui/AppHeader'
+import { FeedbackToast } from '@/components/ui/FeedbackToast'
+import { FeedbackProvider } from '@/context/FeedbackContext'
+import { LoadingProvider } from '@/context/LoadingContext'
 import { t } from '@/src/i18nConfig'
-import '@/styles/components.css'
+import '@/styles/common.css'
 import '@/styles/globals.css'
+import '@/styles/header.css'
+import '@/styles/podcast-detail.css'
+import '@/styles/podcasts.css'
 import '@/styles/skeletons.css'
+import { getRequestLocale } from '@/utils/headers'
 import type { Metadata } from 'next'
+
+// Force dynamic rendering because locale detection reads request headers.
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: t('metadata_title'),
   description: t('metadata_description')
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang={await getRequestLocale()}>
       <body>
-        <NavigationProvider>
-          <AppHeader />
-          {children}
-        </NavigationProvider>
+        <LoadingProvider>
+          <FeedbackProvider>
+            <AppHeader />
+            <FeedbackToast />
+            {children}
+          </FeedbackProvider>
+        </LoadingProvider>
       </body>
     </html>
   )

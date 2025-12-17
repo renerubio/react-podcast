@@ -1,5 +1,6 @@
-import SearchInput from '@/components/SearchInput'
+import SearchInput from '@/components/ui/SearchInput'
 import '@/styles/components.css'
+import { ITop100Podcasts } from '@/utils/interfaces'
 
 /**
  * Filter component for displaying the number of filtered podcast results and a search input.
@@ -17,7 +18,7 @@ const Filter = ({
 }: {
   query: string
   setQuery: (query: string) => void
-  filtered: any[]
+  filtered: ITop100Podcasts[]
 }) => (
   <div className="filter-podcast-container">
     <span className="filter-podcast-number-results">{filtered.length}</span>
