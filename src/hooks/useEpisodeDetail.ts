@@ -56,7 +56,8 @@ export const useEpisodeDetail = ({
     startLoading,
     stopLoading,
     startNavLoading,
-    stopNavLoading
+    stopNavLoading,
+    error
   ])
 
   return { loading, podcast, episodeDetail, error }
