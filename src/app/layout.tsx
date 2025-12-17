@@ -1,10 +1,11 @@
- 
 import AppHeader from '@/components/ui/AppHeader'
 import { FeedbackProvider } from '@/context/FeedbackContext'
 import { LoadingProvider } from '@/context/LoadingContext'
 import { t } from '@/src/i18nConfig'
-import '@/styles/components.css'
 import '@/styles/globals.css'
+import '@/styles/header.css'
+import '@/styles/podcast-detail.css'
+import '@/styles/podcasts.css'
 import '@/styles/skeletons.css'
 import { getRequestLocale } from '@/utils/headers'
 import type { Metadata } from 'next'

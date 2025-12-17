@@ -29,6 +29,14 @@ export type PodcastWithCacheResult = {
   isCached: boolean
 }
 
+export function getCachedPodcast({
+  podcastId
+}: {
+  podcastId: string
+}): IParsedPodcastDetail | null {
+  return readCachedPodcast({ podcastId })
+}
+
 /**
  * Retrieves podcast details with caching support.
  *

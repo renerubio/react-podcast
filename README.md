@@ -108,6 +108,7 @@ Single-page experience to browse and listen to music podcasts. Built with **Next
 - Layout verified on mobile and desktop; grids wrap without horizontal scroll and cards stack vertically on small screens.
 - `next/image` used with descriptive alt text; table headers and `aria-label` attributes added for assistive tech.
 - Inputs and links include labels/titles; focus states preserved by custom CSS.
+- Styles modularized per view (header, podcasts grid, podcast detail) with shared CSS variables and explicit hover/focus states.
 
 ## Views
 

@@ -32,11 +32,12 @@ const PodcastDetail = () => {
   const { podcastId } = useParams<{
     podcastId: string
   }>()
-  const { loading, podcast, episodes, episodesCount } = usePodcastDetail({
-    podcastId
-  })
+  const { loading, podcast, episodes, episodesCount, isCached } =
+    usePodcastDetail({
+      podcastId
+    })
 
-  if (loading || !podcast) {
+  if ((loading && !isCached) || !podcast) {
     return (
       <>
         <SkeletonDetailSidebar />

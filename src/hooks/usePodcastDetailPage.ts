@@ -16,22 +16,39 @@ export const usePodcastDetail = ({
   podcast: IParsedPodcastDetail | null
   episodes: IEpisode[]
   episodesCount: number
+  isCached: boolean
 } => {
   const { loading, startLoading, stopLoading } = useLoading()
   const { newMessage } = useFeedback()
-  const { podcast, episodes, episodesCount } = usePodcast({ podcastId })
+  const { podcast, episodes, episodesCount, isCached } = usePodcast({
+    podcastId
+  })
 
   useEffect(() => {
     startLoading()
+
+    if (podcast && episodesCount > 0 && isCached) {
+      stopLoading()
+      return
+    }
+
     if (episodesCount === 0) return
     stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
     newMessage(`${t('loading_podcast_details')} ${podcast?.trackName}`)
-  }, [episodesCount, newMessage, podcast?.trackName, startLoading, stopLoading])
+  }, [
+    episodesCount,
+    isCached,
+    newMessage,
+    podcast?.trackName,
+    startLoading,
+    stopLoading
+  ])
 
   return {
     loading,
     podcast,
     episodes,
-    episodesCount
+    episodesCount,
+    isCached
   }
 }

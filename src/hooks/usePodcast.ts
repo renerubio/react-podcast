@@ -1,4 +1,4 @@
-import { getPodcastWithCache } from '@/services/cache/podcast'
+import { getCachedPodcast, getPodcastWithCache } from '@/services/cache/podcast'
 import { IEpisode, IParsedPodcastDetail } from '@/utils/interfaces'
 import { useEffect, useState } from 'react'
 
@@ -27,14 +27,24 @@ export function usePodcast({
 }: {
   podcastId: string
 }): UsePodcastResult {
-  const [podcast, setPodcast] = useState<IParsedPodcastDetail | null>(null)
-  const [isCached, setIsCached] = useState(false)
+  const [podcast, setPodcast] = useState<IParsedPodcastDetail | null>(() =>
+    getCachedPodcast({ podcastId })
+  )
+  const [isCached, setIsCached] = useState(() =>
+    Boolean(getCachedPodcast({ podcastId }))
+  )
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     const loadPodcast = async () => {
-      setPodcast(null)
-      setError(null)
+      const cached = getCachedPodcast({ podcastId })
+      if (cached) {
+        if (!podcast) {
+          setPodcast(cached)
+          setIsCached(true)
+        }
+        return
+      }
 
       try {
         const { podcast: data, isCached: cached } = await getPodcastWithCache({
@@ -50,7 +60,7 @@ export function usePodcast({
     }
 
     loadPodcast()
-  }, [podcastId])
+  }, [podcast, podcastId])
 
   return {
     podcast,

@@ -1,4 +1,3 @@
- 
 'use client'
 import AudioPlayer from '@/components/ui/AudioPlayer'
 import Card from '@/components/ui/Card'
@@ -25,7 +24,7 @@ const EpisodeDetail = () => {
     episodeId
   })
 
-  if (loading || !podcast || !episodeDetail) {
+  if (!podcast || !episodeDetail) {
     return (
       <>
         <SkeletonDetailSidebar />
