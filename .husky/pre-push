@@ -5,14 +5,14 @@ printf "${yellow}Executing pre-push hook...${no_color}\n"
 local_branch_name="$(git rev-parse --abbrev-ref HEAD)"
 valid_branch_regex='^((feat|fix|refactor|chore|docs|test|style|ci|perf|build|wip)/[a-zA-Z0-9._-]+)$'
 
-printf "${yellow}Checking branch name…${no_color}\n"
+printf "${yellow}Checking branch name...${no_color}\n"
 if ! printf "%s" "$local_branch_name" | grep -Eq "$valid_branch_regex"; then
     printf "${red}PUSH REJECTED! Invalid branch name: '%s'\nAllowed: <type>/<slug>\n${no_color}" "$local_branch_name"
     exit 1
 fi
 
 # 2) Stop dev server if running
-printf "${yellow}Stopping 'npm run dev' if running…${no_color}\n"
+printf "${yellow}Stopping 'npm run dev' if running...${no_color}\n"
 dev_pid="$(ps aux 2>/dev/null | grep 'next dev' | grep -v grep | awk '{print $2}')"
 if [ -n "$dev_pid" ]; then
     kill "$dev_pid" >/dev/null 2>&1 || true
@@ -22,54 +22,16 @@ else
 fi
 
 # 3) Block tracked .env* files in the repo (safer than checking only staged files)
-printf "${yellow}Checking for tracked .env files…${no_color}\n"
+printf "${yellow}Checking for tracked .env files...${no_color}\n"
 if git ls-files | grep -Eq '(^|/)\.env(\..+)?$'; then
     printf "${red}PUSH REJECTED! .env files are tracked. Remove them from git and add to .gitignore.\n${no_color}"
     printf "   e.g. git rm --cached .env .env.local .env.* && echo '.env*' >> .gitignore\n"
     exit 1
 fi
 
-# 4) Run lint and typecheck (without build)
-printf "${yellow}Running ESLint (npm run lint)…${no_color}\n"
-
-run_lint() {
-    # If a lint script exists in package.json, run it with extra flags
-    if npm run -s | grep -Eq '^\s*lint'; then
-        npm run -s lint -- --max-warnings=0
-        return $?
-    fi
-    # Fallback: if no lint script but eslint is installed, run eslint directly
-    if npx --no-install eslint -v >/dev/null 2>&1; then
-        npx --no-install eslint . --max-warnings=0
-        return $?
-    fi
-    printf "${yellow}Skipping ESLint: no 'lint' script and eslint not installed.${no_color}\n"
-    return 0
-}
-
-if ! run_lint; then
-    printf "${red}PUSH REJECTED! ESLint errors found.${no_color}\n"
-    exit 1
-fi
-
-printf "${yellow}Running TypeScript typecheck…${no_color}\n"
-
-run_typecheck() {
-    # If a typecheck script exists in package.json, run it
-    if npm run -s | grep -Eq '^\s*typecheck'; then
-        npm run -s typecheck
-        return $?
-    fi
-    # Fallback: if no typecheck script but tsc is installed, run tsc directly
-    if npx --no-install tsc -v >/dev/null 2>&1; then
-        npx --no-install tsc --noEmit
-        return $?
-    fi
-    printf "${yellow}Skipping typecheck: no 'typecheck' script and tsc not installed.${no_color}\n"
-    return 0
-}
-
-if ! run_typecheck; then
-    printf "${red}PUSH REJECTED! Type errors found.${no_color}\n"
+# 4) Run project prepush checks (lint + typecheck + tests)
+printf "${yellow}Running npm run prepush...${no_color}\n"
+if ! npm run -s prepush; then
+    printf "${red}PUSH REJECTED! Pre-push checks failed.${no_color}\n"
     exit 1
 fi
