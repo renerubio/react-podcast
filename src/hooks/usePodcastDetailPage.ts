@@ -39,6 +39,7 @@ export const usePodcastDetail = ({
     episodesCount,
     isCached,
     newMessage,
+    podcast,
     podcast?.trackName,
     startLoading,
     stopLoading
