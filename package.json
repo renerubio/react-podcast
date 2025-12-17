@@ -15,6 +15,8 @@
     "format:fix": "prettier . --write",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepush": "npm run -s lint -- --max-warnings=0 && npm run -s typecheck && npm run -s test",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -45,7 +47,7 @@
     "husky": "9.1.7",
     "jsdom": "27.0.1",
     "lint-staged": "16.2.6",
-    "next": "16.0.7",
+    "next": "^16.0.10",
     "prettier": "3.6.2",
     "prettier-plugin-organize-imports": "4.3.0",
     "typescript": "5.9.3",
