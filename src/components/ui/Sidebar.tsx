@@ -1,5 +1,6 @@
 'use client'
 import Card from '@/components/ui/Card'
+import { useFeedback } from '@/hooks/useFeedback'
 import { t } from '@/src/i18nConfig'
 import { IParsedPodcastDetail } from '@/utils/interfaces'
 import Image from 'next/image'
@@ -11,6 +12,7 @@ const Sidebar = ({
 }: {
   podcastDetail: IParsedPodcastDetail
 }) => {
+  const { newMessage } = useFeedback()
   const { podcastId } = useParams<{
     podcastId: string
   }>()
@@ -23,6 +25,7 @@ const Sidebar = ({
       href={`/podcast/${podcastId}`}
       className="podcast-detail-resume-link"
       title={`${t('go_to')} ${t('podcast_detail')} ${trackName}`}
+      onClick={() => newMessage(`${t('loading_podcast_details')} ${trackName}`)}
     >
       <Card className="podcast-detail-resume">
         <Image

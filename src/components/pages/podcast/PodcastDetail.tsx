@@ -32,10 +32,27 @@ const PodcastDetail = () => {
   const { podcastId } = useParams<{
     podcastId: string
   }>()
-  const { loading, podcast, episodes, episodesCount, isCached } =
+  const { loading, podcast, episodes, episodesCount, isCached, error } =
     usePodcastDetail({
       podcastId
     })
+
+  if (error) {
+    return (
+      <>
+        {podcast ? (
+          <Sidebar podcastDetail={podcast} />
+        ) : (
+          <SkeletonDetailSidebar />
+        )}
+        <section className="podcast-detail-episodes">
+          <Card className="podcast-detail-episodes-title" variant="header">
+            <h3>{t('error_podcast_detail')}</h3>
+          </Card>
+        </section>
+      </>
+    )
+  }
 
   if ((loading && !isCached) || !podcast) {
     return (

@@ -47,5 +47,9 @@ export const en: TMessages = {
   episode_detail: 'Episode Detail',
   no_image_available: 'No image available',
   error_loading_podcasts: 'Error loading podcasts.',
-  no_podcasts_found: 'No podcasts found.'
+  no_podcasts_found: 'No podcasts found.',
+  error_podcast_detail:
+    'We could not load this podcast. Please try again later.',
+  error_episode_detail:
+    'We could not load this episode. Please try again later.'
 }

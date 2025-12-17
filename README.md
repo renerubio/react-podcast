@@ -14,6 +14,7 @@ Single-page experience to browse and listen to music podcasts. Built with **Next
 - [Views](#views)
 - [Development / Production](#development--production)
 - [Quality](#quality)
+- [Performance](#performance)
 - [Git Workflow](#git-workflow)
 - [Tags & Releases](#tags--releases)
 - [Testing](#testing)
@@ -144,6 +145,14 @@ Single-page experience to browse and listen to music podcasts. Built with **Next
 - SOLID and layered separation.
 - TypeScript strict on models and services.
 - No UI libraries; custom CSS and baseline responsive behavior.
+
+## Performance
+
+- Effects guarded by dependency arrays to avoid extra renders (e.g., filter memoization, podcast/episode fetching hooks).
+- Memoization (`useMemo`/`useCallback`) applied to filters, episode lookup, and click handlers to prevent rerenders across large lists.
+- Client cache (localStorage + TTL) and skeleton fallbacks reduce network hits and keep navigation snappy.
+- Perf profiling (Chrome DevTools): Home LCP ~0.78s, CLS 0.0, INP 24ms (green); Podcast detail LCP ~0.78s, CLS 0.01, INP 32ms (green). With cache, timings improve further.
+- Next steps: profile with React DevTools and capture findings to validate render timings under load.
 
 ## Git Workflow
 

@@ -70,3 +70,9 @@ header {
     mask-position: 0% 0;
   }
 }
+
+.header-feedback-placeholder {
+  min-width: 140px;
+  min-height: 24px;
+  display: inline-block;
+}

@@ -1,4 +1,5 @@
 import AppHeader from '@/components/ui/AppHeader'
+import { FeedbackToast } from '@/components/ui/FeedbackToast'
 import { FeedbackProvider } from '@/context/FeedbackContext'
 import { LoadingProvider } from '@/context/LoadingContext'
 import { t } from '@/src/i18nConfig'
@@ -30,6 +31,7 @@ export default async function RootLayout({
         <LoadingProvider>
           <FeedbackProvider>
             <AppHeader />
+            <FeedbackToast />
             {children}
           </FeedbackProvider>
         </LoadingProvider>

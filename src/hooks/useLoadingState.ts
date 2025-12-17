@@ -2,8 +2,11 @@ import { useCallback, useState } from 'react'
 
 export interface ILoadingState {
   loading: boolean
+  navLoading: boolean
   startLoading: () => void
   stopLoading: () => void
+  startNavLoading: (timeoutMs?: number) => void
+  stopNavLoading: () => void
 }
 
 /**
@@ -19,9 +22,24 @@ export interface ILoadingState {
  */
 export function useLoadingState(): ILoadingState {
   const [loading, setLoading] = useState(true)
+  const [navLoading, setNavLoading] = useState(false)
 
   const startLoading = useCallback(() => setLoading(true), [])
   const stopLoading = useCallback(() => setLoading(false), [])
+  const startNavLoading = useCallback((timeoutMs?: number) => {
+    setNavLoading(true)
+    if (timeoutMs) {
+      setTimeout(() => setNavLoading(false), timeoutMs)
+    }
+  }, [])
+  const stopNavLoading = useCallback(() => setNavLoading(false), [])
 
-  return { loading, startLoading, stopLoading }
+  return {
+    loading,
+    navLoading,
+    startLoading,
+    stopLoading,
+    startNavLoading,
+    stopNavLoading
+  }
 }

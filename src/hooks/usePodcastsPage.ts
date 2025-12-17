@@ -1,4 +1,5 @@
 import { t } from '@/src/i18nConfig'
+import { TIMEOUT_TOAST_OUT_MS } from '@/utils/constants'
 import { filterPodcasts } from '@/utils/podcastHelpers'
 import { stopLoadingWithTimeout } from '@/utils/utils'
 import { useEffect, useMemo, useState } from 'react'
@@ -23,7 +24,13 @@ import { usePodcasts } from './usePodcasts'
  *
  */
 export const usePodcastsPage = () => {
-  const { loading, startLoading, stopLoading } = useLoading()
+  const {
+    loading,
+    startLoading,
+    stopLoading,
+    startNavLoading,
+    stopNavLoading
+  } = useLoading()
   const { newMessage } = useFeedback()
   const { podcasts, error } = usePodcasts()
   const [query, setQuery] = useState('')
@@ -32,21 +39,33 @@ export const usePodcastsPage = () => {
     if (error) {
       newMessage(t('error_loading_podcasts'))
       stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
+      stopNavLoading()
       return
     }
 
     if (!podcasts) {
       newMessage(t('no_podcasts_found'))
       stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
+      stopNavLoading()
       return
     }
 
     startLoading()
+    startNavLoading(TIMEOUT_TOAST_OUT_MS)
     newMessage(t('loading_top_podcasts'))
     if (podcasts) {
       stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
+      stopNavLoading()
     }
-  }, [podcasts, newMessage, startLoading, stopLoading, error])
+  }, [
+    podcasts,
+    newMessage,
+    startLoading,
+    stopLoading,
+    startNavLoading,
+    stopNavLoading,
+    error
+  ])
 
   const filtered = useMemo(
     () => filterPodcasts({ podcasts, query }),

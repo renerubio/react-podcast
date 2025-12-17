@@ -6,7 +6,7 @@ export function useFeedback() {
   if (!ctx) throw new Error('useFeedback must be used within FeedbackProvider')
   const { message, setMessage } = ctx
   function newMessage(msg: string) {
-    setMessage(msg)
+    setMessage((prev) => (prev === msg ? `${msg} ` : msg))
   }
   return { message, newMessage }
 }
