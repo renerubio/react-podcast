@@ -1,5 +1,7 @@
 import { getTopPodcastsWithCache } from '@/services/cache/topPodcasts'
+import { KEY_PODCASTS } from '@/utils/constants'
 import { ITop100Podcasts } from '@/utils/interfaces'
+import { localStorageGetWithTTL } from '@/utils/utils'
 import { useEffect, useState } from 'react'
 
 /**
@@ -20,13 +22,17 @@ import { useEffect, useState } from 'react'
  *
  */
 export function usePodcasts() {
-  const [podcasts, setPodcasts] = useState<ITop100Podcasts[] | null>(null)
-  const [isCached, setIsCached] = useState(false)
+  const [cachedTopPodcasts] = useState<ITop100Podcasts[] | null>(() =>
+    localStorageGetWithTTL<ITop100Podcasts[]>(KEY_PODCASTS)
+  )
+  const [podcasts, setPodcasts] = useState<ITop100Podcasts[] | null>(
+    cachedTopPodcasts
+  )
+  const [isCached, setIsCached] = useState<boolean>(Boolean(cachedTopPodcasts))
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     const loadPodcasts = async () => {
-      setPodcasts(null)
       setError(null)
 
       try {
@@ -38,6 +44,7 @@ export function usePodcasts() {
       } catch (e) {
         setError(e as Error)
         setPodcasts(null)
+        setIsCached(false)
       }
     }
 

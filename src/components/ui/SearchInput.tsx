@@ -1,6 +1,7 @@
 'use client'
 
 import { t } from '@/src/i18nConfig'
+
 export default function SearchInput({
   value,
   onChange,

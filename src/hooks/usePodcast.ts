@@ -27,8 +27,13 @@ export function usePodcast({
 }: {
   podcastId: string
 }): UsePodcastResult {
-  const [podcast, setPodcast] = useState<IParsedPodcastDetail | null>(null)
-  const [isCached, setIsCached] = useState(false)
+  const [cachedPodcast] = useState<IParsedPodcastDetail | null>(() =>
+    getCachedPodcast({ podcastId })
+  )
+  const [podcast, setPodcast] = useState<IParsedPodcastDetail | null>(
+    cachedPodcast
+  )
+  const [isCached, setIsCached] = useState<boolean>(Boolean(cachedPodcast))
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {

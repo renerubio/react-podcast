@@ -32,10 +32,16 @@ export const usePodcastsPage = () => {
     stopNavLoading
   } = useLoading()
   const { newMessage } = useFeedback()
-  const { podcasts, error } = usePodcasts()
+  const { podcasts, isCached, error } = usePodcasts()
   const [query, setQuery] = useState('')
 
   useEffect(() => {
+    if (podcasts && podcasts.length > 0) {
+      stopLoading()
+      stopNavLoading()
+      return
+    }
+
     if (error) {
       newMessage(t('error_loading_podcasts'))
       stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
@@ -43,19 +49,10 @@ export const usePodcastsPage = () => {
       return
     }
 
-    if (!podcasts) {
-      newMessage(t('no_podcasts_found'))
-      stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
-      stopNavLoading()
-      return
-    }
-
-    startLoading()
-    startNavLoading(TIMEOUT_TOAST_OUT_MS)
-    newMessage(t('loading_top_podcasts'))
-    if (podcasts) {
-      stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
-      stopNavLoading()
+    if (!isCached) {
+      startLoading()
+      startNavLoading(TIMEOUT_TOAST_OUT_MS)
+      newMessage(t('loading_top_podcasts'))
     }
   }, [
     podcasts,
@@ -64,6 +61,7 @@ export const usePodcastsPage = () => {
     stopLoading,
     startNavLoading,
     stopNavLoading,
+    isCached,
     error
   ])
 
