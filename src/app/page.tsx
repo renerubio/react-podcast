@@ -1,4 +1,6 @@
 import Podcasts from '@/components/pages/podcasts/Podcasts'
+import '@/styles/filter.css'
+import '@/styles/podcasts.css'
 
 /**
  * Server-side rendered podcast home page component.

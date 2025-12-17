@@ -1,5 +1,4 @@
 import SearchInput from '@/components/ui/SearchInput'
-import '@/styles/components.css'
 import { ITop100Podcasts } from '@/utils/interfaces'
 
 /**

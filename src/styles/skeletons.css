@@ -1,4 +1,7 @@
 /* Skeleton Loader Styles */
+:root {
+  --skeleton-anim-duration: 3200ms;
+}
 .skeleton-loader {
   position: relative;
   height: 30px;
@@ -24,11 +27,11 @@
     rgba(255, 255, 255, 0) 100%
   );
 
-  background-size: 64.5px 100%;
+  background-size: 65px 100%;
 
   background-position: 0 0;
 
-  animation: skeleton-animation 2000ms infinite;
+  animation: skeleton-animation var(--skeleton-anim-duration) infinite;
 }
 
 @keyframes skeleton-animation {
@@ -69,7 +72,7 @@
     linear-gradient(var(--color-skeleton-dark) 8px, transparent 0),
     linear-gradient(var(--color-skeleton-bg) 100%, transparent 0);
   background-size:
-    92.5px 100%,
+    93px 100%,
     96px 96px,
     128px 16px,
     128px 9px,
@@ -80,9 +83,9 @@
     44px 8px,
     29px 125px,
     29px 152px,
-    29px 172.5px,
+    29px 173px,
     0 0;
-  animation: skeleton-podcast-animation 1500ms infinite;
+  animation: skeleton-podcast-animation var(--skeleton-anim-duration) infinite;
 }
 
 @keyframes skeleton-podcast-animation {
@@ -92,7 +95,7 @@
       44px 8px,
       29px 125px,
       29px 152px,
-      29px 172.5px,
+      29px 173px,
       0 0;
   }
 }
@@ -133,7 +136,7 @@
     linear-gradient(var(--color-skeleton-dark) 31px, transparent 0),
     linear-gradient(var(--color-skeleton-bg) 100%, transparent 0);
   background-size:
-    114.5px 100%,
+    115px 100%,
     44px 31px,
     144px 31px,
     100% 100%;
@@ -142,7 +145,7 @@
     11px 8px,
     71px 8px,
     0 0;
-  animation: skeleton-filter-animation 2000ms infinite;
+  animation: skeleton-filter-animation var(--skeleton-anim-duration) infinite;
 }
 
 @keyframes skeleton-filter-animation {
@@ -158,8 +161,23 @@
 /* Skeleton Podcast Detail Sidebar */
 .skeleton-loader-sidebar {
   position: relative;
-  height: 265px;
+  height: 300px;
+  width: 100%;
+  margin: 0 auto;
 }
+
+@keyframes skeleton-loader-animation-sidebar {
+  to {
+    background-position:
+      100% 0,
+      16px 8px,
+      16px 215.0000153px,
+      16px 246px,
+      16px 277px,
+      0 0;
+  }
+}
+
 .skeleton-loader-sidebar:after {
   content: '';
   display: block;
@@ -176,37 +194,38 @@
       rgba(255, 255, 255, 0.8) 50%,
       rgba(255, 255, 255, 0) 100%
     ),
-    linear-gradient(#aaaaaa 122px, transparent 0),
+    linear-gradient(#aaaaaa 192px, transparent 0),
     linear-gradient(#aaaaaa 16px, transparent 0),
-    linear-gradient(#aaaaaa 11px, transparent 0),
-    linear-gradient(#aaaaaa 29px, transparent 0),
+    linear-gradient(#aaaaaa 16px, transparent 0),
+    linear-gradient(#aaaaaa 16px, transparent 0),
     linear-gradient(#ffffff 100%, transparent 0);
   background-size:
-    106px 100%,
-    180px 122px,
-    180px 16px,
-    180px 11px,
-    180px 29px,
+    264px 100%,
+    496px 192px,
+    496px 16px,
+    496px 16px,
+    496px 16px,
     100% 100%;
   background-position:
     0 0,
-    16px 16px,
-    16px 149.975029px,
-    16px 183.4999771px,
-    16px 212px,
+    16px 8px,
+    16px 215.0000153px,
+    16px 246px,
+    16px 277px,
     0 0;
-  animation: skeleton-loader-sidebar-animation 1000ms infinite;
+  animation: skeleton-loader-animation-sidebar var(--skeleton-anim-duration)
+    infinite;
 }
 
-@keyframes skeleton-loader-sidebar-animation {
-  to {
-    background-position:
-      100% 0,
-      16px 16px,
-      16px 149.975029px,
-      16px 183.4999771px,
-      16px 212px,
-      0 0;
+@media (max-width: 900px) {
+  .skeleton-loader-sidebar:after {
+    background-size:
+      264px 100%,
+      100% 192px,
+      100% 16px,
+      100% 16px,
+      100% 16px,
+      100% 100%;
   }
 }
 
@@ -257,10 +276,11 @@
     0 0,
     16px 16px,
     16px 74px,
-    16px 225.9999886px,
+    16px 226px,
     16px 283px,
     0 0;
-  animation: skeleton-audio-player-animation 2000ms infinite;
+  animation: skeleton-audio-player-animation var(--skeleton-anim-duration)
+    infinite;
 }
 
 @keyframes skeleton-audio-player-animation {
@@ -269,7 +289,7 @@
       100% 0,
       16px 16px,
       16px 74px,
-      16px 225.9999886px,
+      16px 226px,
       16px 283px,
       0 0;
   }
