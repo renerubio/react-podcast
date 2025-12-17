@@ -26,7 +26,8 @@
       "@/context/*": ["./src/context/*"],
       "@/locale/*": ["./src/locale/*"],
       "@/lib/*": ["./src/lib/*"],
-      "@/utils/*": ["./src/utils/*"]
+      "@/utils/*": ["./src/utils/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
   "exclude": ["node_modules"],

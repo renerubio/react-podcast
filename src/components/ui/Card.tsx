@@ -1,3 +1,5 @@
+import { ICardProps } from '@/utils/interfaces'
+
 /**
  * Renders a customizable card component that wraps its children in a semantic HTML tag
  * specified by the `variant` prop (e.g., 'section', 'article', etc.).
@@ -11,7 +13,7 @@ const Card = ({
   children,
   className = '',
   variant = 'section'
-}: CardProps): React.JSX.Element => {
+}: ICardProps): React.JSX.Element => {
   const Tag = variant
   return <Tag className={`card ${className}`}>{children}</Tag>
 }

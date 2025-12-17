@@ -1,11 +1,16 @@
 'use client'
-import Card from '@/components/Card'
+import Card from '@/components/ui/Card'
 import { t } from '@/src/i18nConfig'
+import { IParsedPodcastDetail } from '@/utils/interfaces'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
-const Sidebar = ({ podcastDetail }: { podcastDetail: IPodcastDetail }) => {
+const Sidebar = ({
+  podcastDetail
+}: {
+  podcastDetail: IParsedPodcastDetail
+}) => {
   const { podcastId } = useParams<{
     podcastId: string
   }>()
@@ -25,6 +30,7 @@ const Sidebar = ({ podcastDetail }: { podcastDetail: IPodcastDetail }) => {
           alt={collectionName}
           width={160}
           height={160}
+          loading="eager"
           className="podcast-detail-image"
         />
         <hr />

@@ -1,23 +1,9 @@
-import {
-  SkeletonDetailSidebar,
-  SkeletonDetailTable
-} from '@/components/Skeletons'
-import { Suspense } from 'react'
-import PodcastDetail from './PodcastDetail'
+import PodcastDetail from '@/components/pages/podcast/PodcastDetail'
 
-const PodcastDetailSSR = () => (
+const PodcastDetailPage = () => (
   <main className="podcast-detail-container">
-    <Suspense
-      fallback={
-        <>
-          <SkeletonDetailSidebar />
-          <SkeletonDetailTable />
-        </>
-      }
-    >
-      <PodcastDetail />
-    </Suspense>
+    <PodcastDetail />
   </main>
 )
 
-export default PodcastDetailSSR
+export default PodcastDetailPage

@@ -1,23 +1,8 @@
-'use client'
-import {
-  SkeletonAudioPlayer,
-  SkeletonDetailSidebar
-} from '@/components/Skeletons'
-import { Suspense } from 'react'
-import EpisodeDetail from './EpisodeDetail'
+import EpisodeDetail from '@/components/pages/episode/EpisodeDetail'
 
 const EpisodeDetailSSR = () => (
   <main className="podcast-detail-container">
-    <Suspense
-      fallback={
-        <>
-          <SkeletonAudioPlayer />
-          <SkeletonDetailSidebar />
-        </>
-      }
-    >
-      <EpisodeDetail />
-    </Suspense>
+    <EpisodeDetail />
   </main>
 )
 

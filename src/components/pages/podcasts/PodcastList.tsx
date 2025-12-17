@@ -1,5 +1,6 @@
 'use client'
-import { Podcast } from '@/components/Podcast'
+import { ITop100Podcasts } from '@/utils/interfaces'
+import { Podcast } from './Podcast'
 
 /**
  * Renders a list of podcasts using the provided filtered podcast data.

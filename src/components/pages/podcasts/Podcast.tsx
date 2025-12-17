@@ -1,5 +1,7 @@
-import { useLoading } from '@/context/NavigationContext'
+import { useFeedback } from '@/hooks/useFeedback'
 import { t } from '@/src/i18nConfig'
+import { ITop100Podcasts } from '@/utils/interfaces'
+import { buildNavMessage } from '@/utils/podcastHelpers'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -9,11 +11,11 @@ import Link from 'next/link'
  * @param podcast - The podcast data to display, of type `ITop100Podcasts`.
  * @returns A React component displaying the podcast's image, title, and author.
  *
- * The component uses `useLoading` to show a loading state when navigating,
+ * The component uses `useFeedback` to show a loading state when navigating,
  * and applies visual effects on mouse enter and leave.
  */
 export const Podcast = ({ podcast }: { podcast: ITop100Podcasts }) => {
-  const { start } = useLoading()
+  const { newMessage } = useFeedback()
 
   return (
     <Link
@@ -21,20 +23,9 @@ export const Podcast = ({ podcast }: { podcast: ITop100Podcasts }) => {
       href={`/podcast/${podcast.id}`}
       title={`${t('go_to')} ${t('podcast_detail')} ${podcast.title} ${t('by')} ${podcast.author}`}
       onClick={() => {
-        start('Navigating to podcast page')
+        newMessage(buildNavMessage({ target: podcast.title }))
       }}
       className="podcast-item"
-      onMouseEnter={(e) => {
-        ;(e.currentTarget as HTMLElement).style.transform =
-          'translateY(-6px) scale(1.03)'
-        ;(e.currentTarget as HTMLElement).style.boxShadow =
-          '0 6px 24px rgba(0,0,0,0.14)'
-      }}
-      onMouseLeave={(e) => {
-        ;(e.currentTarget as HTMLElement).style.transform = ''
-        ;(e.currentTarget as HTMLElement).style.boxShadow =
-          '0 2px 8px rgba(0,0,0,0.08)'
-      }}
     >
       <Image
         src={podcast.image}

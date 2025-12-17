@@ -1,5 +1,6 @@
-import SearchInput from '@/components/SearchInput'
+import SearchInput from '@/components/ui/SearchInput'
 import '@/styles/components.css'
+import { ITop100Podcasts } from '@/utils/interfaces'
 
 /**
  * Filter component for displaying the number of filtered podcast results and a search input.

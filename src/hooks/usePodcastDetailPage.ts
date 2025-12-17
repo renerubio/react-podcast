@@ -1,0 +1,37 @@
+// src/hooks/usePodcastDetail.ts
+import { useFeedback } from '@/hooks/useFeedback'
+import { useLoading } from '@/hooks/useLoading'
+import { usePodcast } from '@/src/hooks/usePodcast'
+import { t } from '@/src/i18nConfig'
+import { stopLoadingWithTimeout } from '@/src/utils/utils'
+import { IEpisode, IParsedPodcastDetail } from '@/utils/interfaces'
+import { useEffect } from 'react'
+
+export const usePodcastDetail = ({
+  podcastId
+}: {
+  podcastId: string
+}): {
+  loading: boolean
+  podcast: IParsedPodcastDetail | null
+  episodes: IEpisode[]
+  episodesCount: number
+} => {
+  const { loading, startLoading, stopLoading } = useLoading()
+  const { newMessage } = useFeedback()
+  const { podcast, episodes, episodesCount } = usePodcast({ podcastId })
+
+  useEffect(() => {
+    startLoading()
+    if (episodesCount === 0) return
+    stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
+    newMessage(`${t('loading_podcast_details')} ${podcast?.trackName}`)
+  }, [episodesCount, newMessage, podcast?.trackName, startLoading, stopLoading])
+
+  return {
+    loading,
+    podcast,
+    episodes,
+    episodesCount
+  }
+}
