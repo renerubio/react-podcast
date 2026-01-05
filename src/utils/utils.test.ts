@@ -1,11 +1,6 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-import {
-  localStorageGetWithTTL,
-  localStorageSetWithTTL,
-  validateJsonContentType,
-  validateTextContentType
-} from './utils'
+import { validateJsonContentType, validateTextContentType } from './utils'
 
 describe('utils/utils', () => {
   it('validateJsonContentType throws on non-json', () => {
@@ -24,20 +19,5 @@ describe('utils/utils', () => {
     expect(() => validateTextContentType(res)).toThrow(
       /Expected text content type/
     )
-  })
-
-  it('localStorageSetWithTTL stores and localStorageGetWithTTL reads until expired', () => {
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date('2025-01-01T00:00:00.000Z'))
-
-    localStorage.clear()
-    localStorageSetWithTTL('k', { a: 1 }, 1000)
-    expect(localStorageGetWithTTL<{ a: number }>('k')).toEqual({ a: 1 })
-
-    vi.setSystemTime(new Date('2025-01-01T00:00:01.001Z'))
-    expect(localStorageGetWithTTL<{ a: number }>('k')).toBeNull()
-    expect(localStorage.getItem('k')).toBeNull()
-
-    vi.useRealTimers()
   })
 })

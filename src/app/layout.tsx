@@ -2,6 +2,7 @@ import AppHeader from '@/components/ui/AppHeader'
 import { FeedbackToast } from '@/components/ui/FeedbackToast'
 import { FeedbackProvider } from '@/context/FeedbackContext'
 import { LoadingProvider } from '@/context/LoadingContext'
+import { QueryProvider } from '@/lib/reactQuery/QueryProvider'
 import { t } from '@/src/i18nConfig'
 import '@/styles/common.css'
 import '@/styles/globals.css'
@@ -26,13 +27,15 @@ export default async function RootLayout({
   return (
     <html lang={await getRequestLocale()}>
       <body>
-        <LoadingProvider>
-          <FeedbackProvider>
-            <AppHeader />
-            <FeedbackToast />
-            {children}
-          </FeedbackProvider>
-        </LoadingProvider>
+        <QueryProvider>
+          <LoadingProvider>
+            <FeedbackProvider>
+              <AppHeader />
+              <FeedbackToast />
+              {children}
+            </FeedbackProvider>
+          </LoadingProvider>
+        </QueryProvider>
       </body>
     </html>
   )

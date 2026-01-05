@@ -2,15 +2,14 @@
 import AudioPlayer from '@/components/ui/AudioPlayer'
 import Card from '@/components/ui/Card'
 import Sidebar from '@/components/ui/Sidebar'
-import { SkeletonDetailSidebar } from '@/components/ui/Skeletons'
+import { SkeletonEpisodeDetail } from '@/components/ui/Skeletons'
 import { useEpisodeDetail } from '@/src/hooks/useEpisodeDetail'
 import { t } from '@/src/i18nConfig'
 import { useParams } from 'next/navigation'
 
 /**
- * Renders a single episode using data from the cached podcast detail in localStorage.
- * Announces loading via feedback messaging, shows skeletons until both the podcast
- * and episode are resolved, and stops the loader after state is populated.
+ * Renders a single episode using the cached podcast detail from TanStack Query.
+ * Shows skeletons until both the podcast and episode are resolved.
  */
 const EpisodeDetail = () => {
   const { podcastId, episodeId } = useParams<{
@@ -22,14 +21,14 @@ const EpisodeDetail = () => {
     episodeId
   })
 
-  if (error || (!podcast && !episodeDetail)) {
+  if (loading) {
+    return <SkeletonEpisodeDetail />
+  }
+
+  if (error || !podcast || !episodeDetail) {
     return (
       <>
-        {podcast ? (
-          <Sidebar podcastDetail={podcast} />
-        ) : (
-          <SkeletonDetailSidebar />
-        )}
+        <Sidebar podcastDetail={podcast!} />
         <div className="podcast-detail-episode">
           <Card variant="section" className="podcast-detail-episode-card">
             <h1 className="podcast-detail-episode-title">
@@ -43,7 +42,7 @@ const EpisodeDetail = () => {
 
   return (
     <>
-      {<Sidebar podcastDetail={podcast!} />}
+      <Sidebar podcastDetail={podcast} />
       <div className="podcast-detail-episode">
         <Card variant="section" className="podcast-detail-episode-card">
           <h1 className="podcast-detail-episode-title">

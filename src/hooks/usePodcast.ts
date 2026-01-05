@@ -1,6 +1,7 @@
-import { getCachedPodcast, getPodcastWithCache } from '@/services/cache/podcast'
+import { queryKeys } from '@/lib/reactQuery/queryKeys'
+import { fetchPodcastDetail } from '@/services/fetchPodcastDetail'
 import { IEpisode, IParsedPodcastDetail } from '@/utils/interfaces'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 /**
  * Shape returned by `usePodcast`, combining the normalized podcast payload
@@ -15,10 +16,10 @@ interface UsePodcastResult {
 }
 
 /**
- * Fetches and caches a podcast detail by id.
- * - Reads from localStorage cache with TTL before hitting the API.
- * - Scrapes the feed URL to enrich metadata with description and episodes.
- * - Persists the combined payload back to cache for a day.
+ * Fetches a podcast detail by id using TanStack Query.
+ *
+ * Caching/persistence is handled by the global TanStack Query setup (IndexedDB),
+ * so this hook stays focused on data access and shape for the UI.
  * @param podcastId - iTunes podcast identifier.
  * @returns Podcast detail, cache indicator, and any load error.
  */
@@ -27,45 +28,18 @@ export function usePodcast({
 }: {
   podcastId: string
 }): UsePodcastResult {
-  const [cachedPodcast] = useState<IParsedPodcastDetail | null>(() =>
-    getCachedPodcast({ podcastId })
-  )
-  const [podcast, setPodcast] = useState<IParsedPodcastDetail | null>(
-    cachedPodcast
-  )
-  const [isCached, setIsCached] = useState<boolean>(Boolean(cachedPodcast))
-  const [error, setError] = useState<Error | null>(null)
-
-  useEffect(() => {
-    const loadPodcast = async () => {
-      const cached = getCachedPodcast({ podcastId })
-      if (cached) {
-        setPodcast(cached)
-        setIsCached(true)
-        return
-      }
-
-      try {
-        const { podcast: data, isCached: cached } = await getPodcastWithCache({
-          podcastId
-        })
-
-        setPodcast(data)
-        setIsCached(cached)
-      } catch (e) {
-        setError(e as Error)
-        setPodcast(null)
-      }
-    }
-
-    loadPodcast()
-  }, [podcastId])
+  const { data, error } = useQuery({
+    queryKey: queryKeys.podcastDetail(podcastId),
+    queryFn: () => fetchPodcastDetail(podcastId),
+    enabled: Boolean(podcastId),
+    refetchOnMount: true
+  })
 
   return {
-    podcast,
-    isCached,
-    episodes: podcast?.episodes as IEpisode[],
-    episodesCount: podcast?.episodes?.length ?? 0,
-    error
+    podcast: data ?? null,
+    isCached: Boolean(data),
+    episodes: (data?.episodes ?? []) as IEpisode[],
+    episodesCount: data?.episodes?.length ?? 0,
+    error: (error as Error) ?? null
   }
 }
