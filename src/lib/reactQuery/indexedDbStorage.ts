@@ -6,6 +6,9 @@ import { createStore, del, entries, get, set } from 'idb-keyval'
  *
  * Using IndexedDB avoids blocking the main thread (unlike `localStorage`) and
  * survives full page reloads / browser restarts, matching the existing 24h cache strategy.
+ *
+ * @remarks
+ * Returns null when `indexedDB` is unavailable (e.g., tests or private mode).
  */
 const STORE = createStore('react-podcast', 'tanstack-query')
 

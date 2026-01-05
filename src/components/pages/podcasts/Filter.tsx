@@ -2,13 +2,18 @@ import SearchInput from '@/components/ui/SearchInput'
 import { ITop100Podcasts } from '@/utils/interfaces'
 
 /**
- * Filter component for displaying the number of filtered podcast results and a search input.
+ * Filter component displaying the number of filtered podcast results and a search input.
  *
- * @param query - The current search query string.
- * @param setQuery - Function to update the search query.
- * @param filtered - Array of filtered podcast items.
+ * @param props - Component props.
+ * @param props.query - Current search query string.
+ * @param props.setQuery - Function to update the search query.
+ * @param props.filtered - Array of filtered podcast items.
+ * @returns Container with results count and search input.
  *
- * @returns A container with the number of results and a search input, which is disabled if there are no results.
+ * @example
+ * ```tsx
+ * <Filter query={query} setQuery={setQuery} filtered={filtered} />
+ * ```
  */
 const Filter = ({
   query,

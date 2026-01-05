@@ -30,8 +30,8 @@ export default async function RootLayout({
         <QueryProvider>
           <LoadingProvider>
             <FeedbackProvider>
-              <AppHeader />
               <FeedbackToast />
+              <AppHeader />
               {children}
             </FeedbackProvider>
           </LoadingProvider>

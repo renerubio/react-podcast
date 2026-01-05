@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { validateJsonContentType, validateTextContentType } from './utils'
+import {
+  resolveStopLoadingTimeout,
+  validateJsonContentType,
+  validateTextContentType
+} from './utils'
 
 describe('utils/utils', () => {
   it('validateJsonContentType throws on non-json', () => {
@@ -18,6 +22,18 @@ describe('utils/utils', () => {
     })
     expect(() => validateTextContentType(res)).toThrow(
       /Expected text content type/
+    )
+  })
+
+  it('resolveStopLoadingTimeout returns fallback when timeout is undefined', () => {
+    expect(
+      resolveStopLoadingTimeout({ timeout: undefined, fallback: 1500 })
+    ).toBe(1500)
+  })
+
+  it('resolveStopLoadingTimeout returns timeout when provided', () => {
+    expect(resolveStopLoadingTimeout({ timeout: 2500, fallback: 1500 })).toBe(
+      2500
     )
   })
 })

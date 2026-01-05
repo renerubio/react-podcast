@@ -4,7 +4,11 @@ vi.mock('@/src/i18nConfig', () => ({
   t: (key: string) => key
 }))
 
-import { parseEpisodesFromFeed, parsePodcastDescription } from './normalize'
+import {
+  parseEpisodesFromFeed,
+  parseEpisodesFromFeedPure,
+  parsePodcastDescription
+} from './normalize'
 
 describe('utils/normalize (feed parsing)', () => {
   it('parsePodcastDescription reads channel description', () => {
@@ -42,5 +46,21 @@ describe('utils/normalize (feed parsing)', () => {
     expect(episodes.map((e) => e.title)).toEqual(['Ep1', 'Ep2'])
     expect(episodes[0]?.id).toBe('12345')
     expect(episodes[1]?.id).toBe('abc')
+  })
+
+  it('parseEpisodesFromFeedPure uses the provided unknown label', () => {
+    const xml = new DOMParser().parseFromString(
+      `<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"><channel>
+        <item>
+          <guid>abc</guid>
+          <title>Ep1</title>
+          <itunes:duration>0:00</itunes:duration>
+        </item>
+      </channel></rss>`,
+      'text/xml'
+    )
+
+    const episodes = parseEpisodesFromFeedPure(xml, 'unknown-duration')
+    expect(episodes[0]?.duration).toBe('unknown-duration')
   })
 })

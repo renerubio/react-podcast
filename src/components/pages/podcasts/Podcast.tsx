@@ -8,11 +8,17 @@ import Link from 'next/link'
 /**
  * Renders a podcast item as a clickable link with interactive hover effects.
  *
- * @param podcast - The podcast data to display, of type `ITop100Podcasts`.
- * @returns A React component displaying the podcast's image, title, and author.
+ * @param props - Component props.
+ * @param props.podcast - Podcast data to display.
+ * @returns A link element with podcast image, title, and author.
  *
- * The component uses `useFeedback` to show a loading state when navigating,
- * and applies visual effects on mouse enter and leave.
+ * @remarks
+ * Uses `useFeedback` to show a toast message during navigation.
+ *
+ * @example
+ * ```tsx
+ * <Podcast podcast={podcast} />
+ * ```
  */
 export const Podcast = ({ podcast }: { podcast: ITop100Podcasts }) => {
   const { newMessage } = useFeedback()

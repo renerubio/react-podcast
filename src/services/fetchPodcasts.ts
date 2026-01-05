@@ -11,15 +11,16 @@ const APPLE_TOP_100_URL =
 /**
  * Fetches the top 100 podcasts from Apple's RSS feed.
  *
- * @returns A promise that resolves to an array of podcast objects containing
- * id, title, author, image URL, and summary information.
- *
- * @throws {Error} When the fetch request fails, returns a non-OK status,
- * receives unexpected content type, or encounters any other error during processing.
+ * @returns Promise that resolves to an array of normalized podcast objects.
+ * @throws Error when the fetch request fails or the response is invalid.
  *
  * @remarks
- * This function uses caching with a revalidation period defined by REVALIDATE_SECONDS.
- * The podcast data is transformed from Apple's RSS feed format to a simplified structure.
+ * Uses Next.js revalidation via `REVALIDATE_SECONDS`.
+ *
+ * @example
+ * ```typescript
+ * const podcasts = await fetchTopPodcasts()
+ * ```
  */
 export async function fetchTopPodcasts(): Promise<ITop100Podcasts[]> {
   try {

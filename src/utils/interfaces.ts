@@ -1,5 +1,9 @@
 /**
  * Props accepted by the shared `Card` component to control semantic variant and styling.
+ *
+ * @property children - Content to render inside the card.
+ * @property className - Optional additional CSS classes.
+ * @property variant - Semantic/visual variant for the card container.
  */
 export interface ICardProps {
   children: React.ReactNode
@@ -16,6 +20,13 @@ export interface ICardProps {
 
 /**
  * Episode model normalized from feeds and lookup responses.
+ *
+ * @property id - Episode identifier from feed or API.
+ * @property title - Episode title.
+ * @property url - Optional audio URL.
+ * @property date - Publication date string.
+ * @property duration - Duration in seconds or formatted string.
+ * @property description - Optional episode description.
  */
 export interface IEpisode {
   id: string | number
@@ -29,6 +40,12 @@ export interface IEpisode {
 
 /**
  * Minimal data shape used to render the Top 100 podcasts list.
+ *
+ * @property id - Podcast identifier.
+ * @property title - Podcast title.
+ * @property author - Podcast author.
+ * @property image - Artwork URL.
+ * @property summary - Optional summary text.
  */
 export interface ITop100Podcasts {
   id: string
@@ -40,6 +57,9 @@ export interface ITop100Podcasts {
 
 /**
  * Full podcast detail returned by the lookup API and enriched with episodes.
+ *
+ * @remarks
+ * Field names align with the Apple iTunes Lookup API response.
  */
 export interface IPodcastDetail {
   wrapperType: string
@@ -79,6 +99,8 @@ export interface IPodcastDetail {
 
 /**
  * Podcast detail with parsed description injected from the RSS feed.
+ *
+ * @property description - Parsed description from the podcast RSS feed.
  */
 export interface IParsedPodcastDetail extends IPodcastDetail {
   description: string

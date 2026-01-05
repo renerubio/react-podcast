@@ -8,8 +8,16 @@ import { t } from '@/src/i18nConfig'
 import { useParams } from 'next/navigation'
 
 /**
- * Renders a single episode using the cached podcast detail from TanStack Query.
+ * Renders a single episode using cached podcast detail from TanStack Query.
+ *
  * Shows skeletons until both the podcast and episode are resolved.
+ *
+ * @returns Episode detail view or loading skeletons.
+ *
+ * @example
+ * ```tsx
+ * <EpisodeDetail />
+ * ```
  */
 const EpisodeDetail = () => {
   const { podcastId, episodeId } = useParams<{

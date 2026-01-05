@@ -19,7 +19,7 @@
 
 .feedback-toast {
   position: fixed;
-  top: 68px;
+  top: 5px;
   right: 20px;
   background: var(--color-primary);
   color: #fff;
