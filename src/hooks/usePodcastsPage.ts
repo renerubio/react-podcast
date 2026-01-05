@@ -1,11 +1,10 @@
+import { queryKeys } from '@/lib/reactQuery/queryKeys'
+import { fetchTopPodcasts } from '@/services/fetchPodcasts'
 import { t } from '@/src/i18nConfig'
-import { TIMEOUT_TOAST_OUT_MS } from '@/utils/constants'
 import { filterPodcasts } from '@/utils/podcastHelpers'
-import { stopLoadingWithTimeout } from '@/utils/utils'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeedback } from './useFeedback'
-import { useLoading } from './useLoading'
-import { usePodcasts } from './usePodcasts'
 
 /**
  * Custom hook that manages the state and logic for the Podcasts page.
@@ -24,54 +23,42 @@ import { usePodcasts } from './usePodcasts'
  *
  */
 export const usePodcastsPage = () => {
-  const {
-    loading,
-    startLoading,
-    stopLoading,
-    startNavLoading,
-    stopNavLoading
-  } = useLoading()
   const { newMessage } = useFeedback()
-  const { podcasts, isCached, error } = usePodcasts()
+  const {
+    data: podcasts,
+    error,
+    isPending,
+    isFetching
+  } = useQuery({
+    queryKey: queryKeys.topPodcasts,
+    queryFn: fetchTopPodcasts,
+    refetchOnMount: true
+  })
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    if (podcasts && podcasts.length > 0) {
-      stopLoading()
-      stopNavLoading()
-      return
-    }
-
     if (error) {
       newMessage(t('error_loading_podcasts'))
-      stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
-      stopNavLoading()
       return
     }
 
-    if (!isCached) {
-      startLoading()
-      startNavLoading(TIMEOUT_TOAST_OUT_MS)
+    if (!podcasts && isFetching) {
       newMessage(t('loading_top_podcasts'))
+      return
     }
-  }, [
-    podcasts,
-    newMessage,
-    startLoading,
-    stopLoading,
-    startNavLoading,
-    stopNavLoading,
-    isCached,
-    error
-  ])
+
+    if (podcasts && podcasts.length === 0) {
+      newMessage(t('no_podcasts_found'))
+    }
+  }, [podcasts, newMessage, isFetching, error])
 
   const filtered = useMemo(
-    () => filterPodcasts({ podcasts, query }),
+    () => filterPodcasts({ podcasts: podcasts ?? null, query }),
     [podcasts, query]
   )
 
   return {
-    loading,
+    loading: !podcasts && (isPending || isFetching),
     query,
     setQuery,
     filtered

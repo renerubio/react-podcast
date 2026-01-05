@@ -1,3 +1,4 @@
+import { setEpisodeUrl } from '@/services/episodeUrlStorage'
 import { t } from '@/src/i18nConfig'
 import { IEpisode, ITop100Podcasts } from '@/utils/interfaces'
 import { normalizeText } from '@/utils/normalize'
@@ -42,7 +43,7 @@ export function rememberEpisodeUrl({
 }): void {
   if (typeof window === 'undefined') return
   if (!url) return
-  localStorage.setItem(String(episodeId), String(url))
+  void setEpisodeUrl({ episodeId, url: String(url) })
 }
 
 export function buildNavMessage({ target }: { target: string }) {

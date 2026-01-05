@@ -1,11 +1,10 @@
+import { queryKeys } from '@/lib/reactQuery/queryKeys'
+import { fetchPodcastDetail } from '@/services/fetchPodcastDetail'
 import { t } from '@/src/i18nConfig'
-import { TIMEOUT_TOAST_OUT_MS } from '@/utils/constants'
 import { findEpisodeById } from '@/utils/podcastHelpers'
-import { stopLoadingWithTimeout } from '@/utils/utils'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 import { useFeedback } from './useFeedback'
-import { useLoading } from './useLoading'
-import { usePodcast } from './usePodcast'
 
 export const useEpisodeDetail = ({
   podcastId,
@@ -14,51 +13,51 @@ export const useEpisodeDetail = ({
   podcastId: string
   episodeId: string
 }) => {
-  const {
-    loading,
-    startLoading,
-    stopLoading,
-    startNavLoading,
-    stopNavLoading
-  } = useLoading()
   const { newMessage } = useFeedback()
-  const { podcast, episodes, error } = usePodcast({ podcastId })
+  const {
+    data: podcast,
+    error,
+    isPending,
+    isFetching
+  } = useQuery({
+    queryKey: queryKeys.podcastDetail(podcastId),
+    queryFn: () => fetchPodcastDetail(podcastId),
+    enabled: Boolean(podcastId),
+    refetchOnMount: true
+  })
 
   const episodeDetail = useMemo(
-    () => findEpisodeById({ episodes, episodeId }),
-    [episodes, episodeId]
+    () => findEpisodeById({ episodes: podcast?.episodes, episodeId }),
+    [podcast?.episodes, episodeId]
   )
 
   useEffect(() => {
-    startLoading()
-    startNavLoading(TIMEOUT_TOAST_OUT_MS)
-
     if (error) {
-      stopLoading()
-      stopNavLoading()
       newMessage(t('error_episode_detail'))
       return
     }
 
     if (!episodeDetail) {
-      newMessage(`${t('episode: ')} ${episodeId} ${t('not_found')} `)
-      stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
-      stopNavLoading()
+      if (!isFetching && !isPending && podcast) {
+        newMessage(`${t('episode: ')} ${episodeId} ${t('not_found')} `)
+      }
       return
     }
-    stopLoadingWithTimeout({ stopLoadingHandler: stopLoading })
-    stopNavLoading()
     newMessage(`${t('loading_episode_details')} ${episodeDetail.title}`)
   }, [
     episodeDetail,
     episodeId,
     newMessage,
-    startLoading,
-    stopLoading,
-    startNavLoading,
-    stopNavLoading,
+    isFetching,
+    isPending,
+    podcast,
     error
   ])
 
-  return { loading, podcast, episodeDetail, error }
+  return {
+    loading: !podcast && (isPending || isFetching),
+    podcast: podcast ?? null,
+    episodeDetail,
+    error
+  }
 }
