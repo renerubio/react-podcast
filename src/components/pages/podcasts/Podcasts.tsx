@@ -10,10 +10,12 @@ import { usePodcastsPage } from '@/hooks/usePodcastsPage'
  * Displays a list of top 100 podcasts with search/filter functionality.
  * Shows a skeleton loader while data is being fetched.
  *
- * @component
- * @returns {JSX.Element} The rendered podcasts page with filter and list components,
- * or a skeleton loader during the loading state
+ * @returns Podcasts page or a skeleton loader during the loading state.
  *
+ * @example
+ * ```tsx
+ * <PodcastHomePage />
+ * ```
  */
 const PodcastHomePage = () => {
   const { loading, query, setQuery, filtered } = usePodcastsPage()

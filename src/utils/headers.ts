@@ -1,16 +1,22 @@
 'use server'
-import { LANGUAGE_FALLBACK } from '@/utils/constants'
+import { parseLocaleFromAcceptLanguage } from '@/utils/headersPure'
 import { headers } from 'next/headers'
 
 /**
  * Retrieves the preferred locale from the HTTP request headers.
  *
- * This function asynchronously fetches the HTTP headers, extracts the
- * 'accept-language' value, and parses it to determine the primary locale.
- * If the 'accept-language' header is missing or cannot be parsed, it defaults to 'en'.
+ * @impure
+ * @remarks
+ * - Reads request headers from Next.js runtime.
+ * - Depends on the current request environment and headers.
  *
- * @returns {Promise<string>} A promise that resolves to the locale string (e.g., 'en', 'es').
- * @throws {Error} Throws an error if the headers cannot be retrieved or processed.
+ * @returns A promise that resolves to the locale string (e.g., `en`, `es`).
+ * @throws Error when headers cannot be retrieved or processed.
+ *
+ * @example
+ * ```typescript
+ * const locale = await getRequestLocale()
+ * ```
  */
 export async function getRequestLocale(): Promise<string> {
   try {
@@ -19,8 +25,7 @@ export async function getRequestLocale(): Promise<string> {
       throw new Error('HTTP headers could not be retrieved')
     }
     const acceptLanguage = httpHeaders.get('accept-language') || ''
-    const locale = acceptLanguage.split(',')[0]?.split('-')[0]
-    return locale || LANGUAGE_FALLBACK
+    return parseLocaleFromAcceptLanguage(acceptLanguage)
   } catch (error) {
     throw new Error(
       `Failed to retrieve or process headers: ${(error as Error).message}`

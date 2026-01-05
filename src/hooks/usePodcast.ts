@@ -6,6 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 /**
  * Shape returned by `usePodcast`, combining the normalized podcast payload
  * with flags indicating cache usage and load failures.
+ *
+ * @param podcast - Resolved podcast detail or null.
+ * @param episodes - Episode list derived from the podcast detail.
+ * @param episodesCount - Count of episodes.
+ * @param isCached - True when data came from cache.
+ * @param error - Error state when loading fails.
  */
 interface UsePodcastResult {
   podcast: IParsedPodcastDetail | null
@@ -20,8 +26,15 @@ interface UsePodcastResult {
  *
  * Caching/persistence is handled by the global TanStack Query setup (IndexedDB),
  * so this hook stays focused on data access and shape for the UI.
- * @param podcastId - iTunes podcast identifier.
+ *
+ * @param params - Input parameters.
+ * @param params.podcastId - iTunes podcast identifier.
  * @returns Podcast detail, cache indicator, and any load error.
+ *
+ * @example
+ * ```typescript
+ * const { podcast, episodes } = usePodcast({ podcastId: '123' })
+ * ```
  */
 export function usePodcast({
   podcastId

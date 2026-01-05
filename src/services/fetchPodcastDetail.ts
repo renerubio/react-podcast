@@ -9,6 +9,14 @@ import { parsePodcastDetail } from '@/utils/normalize'
  * This function is designed to be used as a TanStack Query `queryFn`:
  * - No local persistence here (TanStack persistence handles it).
  * - Returns a UI-friendly, normalized object (metadata + episodes).
+ *
+ * @param podcastId - iTunes podcast identifier.
+ * @returns Promise that resolves to a normalized podcast detail object.
+ *
+ * @example
+ * ```typescript
+ * const detail = await fetchPodcastDetail('123')
+ * ```
  */
 export async function fetchPodcastDetail(
   podcastId: string

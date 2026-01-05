@@ -8,11 +8,20 @@ import { TAppleEntry } from '@/utils/types'
 
 /**
  * Normalizes a string for comparison or search operations.
+ *
  * - Converts to lowercase.
  * - Removes diacritics.
  * - Trims whitespace.
- * @param text - The input string to normalize.
- * @returns The normalized string.
+ *
+ * @pure
+ * @param text - Input string to normalize.
+ * @returns Normalized string.
+ *
+ * @example
+ * ```typescript
+ * normalizeText('  Árbol  ')
+ * // => 'arbol'
+ * ```
  */
 export function normalizeText(text: string): string {
   return text
@@ -37,8 +46,10 @@ function normalizeEpisodeId(idRaw: string): string {
 
 /**
  * Extracts and trims the podcast description from a feed XML document.
- * @param xml - The parsed podcast feed as an XMLDocument.
- * @returns The podcast description, or an empty string if not present.
+ *
+ * @pure
+ * @param xml - Parsed podcast feed as an XMLDocument.
+ * @returns Podcast description, or an empty string if not present.
  */
 export function parsePodcastDescription(xml: XMLDocument): string {
   return xml.querySelector('channel > description')?.textContent?.trim() ?? ''
@@ -46,11 +57,18 @@ export function parsePodcastDescription(xml: XMLDocument): string {
 
 /**
  * Parses episode items from a podcast feed XML document.
- * Normalizes episode IDs and durations, and fills unknown durations with a localized label.
- * @param xml - The parsed podcast feed as an XMLDocument.
- * @returns An array of normalized episode objects.
+ *
+ * Normalizes episode IDs and durations, and fills unknown durations with a fallback label.
+ *
+ * @pure
+ * @param xml - Parsed podcast feed as an XMLDocument.
+ * @param unknownLabel - Fallback label for unknown durations.
+ * @returns Array of normalized episode objects.
  */
-export function parseEpisodesFromFeed(xml: XMLDocument): IEpisode[] {
+export function parseEpisodesFromFeedPure(
+  xml: XMLDocument,
+  unknownLabel: string
+): IEpisode[] {
   return Array.from(xml.querySelectorAll('item'))
     .map((item) => {
       const idRaw = item.querySelector('guid')?.textContent ?? ''
@@ -58,7 +76,7 @@ export function parseEpisodesFromFeed(xml: XMLDocument): IEpisode[] {
       const durationRaw =
         item.getElementsByTagName('itunes:duration')[0]?.textContent
       const duration =
-        durationRaw && durationRaw !== '0:00' ? durationRaw : t('unknown')
+        durationRaw && durationRaw !== '0:00' ? durationRaw : unknownLabel
 
       return {
         id,
@@ -73,12 +91,29 @@ export function parseEpisodesFromFeed(xml: XMLDocument): IEpisode[] {
 }
 
 /**
+ * Parses episode items from a podcast feed XML document.
+ *
+ * Normalizes episode IDs and durations, and fills unknown durations with a localized label.
+ *
+ * @impure
+ * @remarks
+ * - Depends on i18n state via `t('unknown')`.
+ *
+ * @param xml - Parsed podcast feed as an XMLDocument.
+ * @returns Array of normalized episode objects.
+ */
+export function parseEpisodesFromFeed(xml: XMLDocument): IEpisode[] {
+  return parseEpisodesFromFeedPure(xml, t('unknown'))
+}
+
+/**
  * Combines podcast metadata and feed data into a normalized podcast detail object.
- * Includes description and episodes parsed from the feed.
- * @param params - Object containing podcast metadata and parsed feed XML.
- * @param params.podcast - The podcast metadata from the API.
- * @param params.xml - The parsed podcast feed as an XMLDocument.
- * @returns A normalized podcast detail object for UI consumption.
+ *
+ * @pure
+ * @param params - Input data for normalization.
+ * @param params.podcast - Podcast metadata from the API.
+ * @param params.xml - Parsed podcast feed as an XMLDocument.
+ * @returns Normalized podcast detail for UI consumption.
  */
 export function parsePodcastDetail({
   podcast,
@@ -95,25 +130,51 @@ export function parsePodcastDetail({
 }
 
 /**
- * Formats an ISO date string into a locale-specific date string with numeric day, month, and year.
+ * Formats an ISO date string using a provided formatter.
  *
- * @param iso - The ISO date string to format.
- * @returns The formatted date string according to the user's locale.
+ * @pure
+ * @param iso - ISO date string to format.
+ * @param formatter - Formatter function for a Date instance.
+ * @returns Formatted date string.
  */
-export function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat(undefined, {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric'
-  }).format(new Date(iso))
+export function formatDateWithFormatter(
+  iso: string,
+  formatter: (date: Date) => string
+): string {
+  return formatter(new Date(iso))
 }
 
 /**
- * Formats a duration value (in seconds) as a string in "m:ss" format.
- * If the input is already a string, it returns the input unchanged.
+ * Formats an ISO date string into a locale-specific date string.
  *
- * @param duration - The duration to format, either as a number (seconds) or a string.
- * @returns The formatted duration string in "m:ss" format, or the original string if input is a string.
+ * @impure
+ * @remarks
+ * - Uses runtime locale/timezone when `undefined` is passed to `Intl.DateTimeFormat`.
+ *
+ * @param iso - ISO date string to format.
+ * @returns Formatted date string according to the user's locale.
+ */
+export function formatDate(iso: string): string {
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric'
+  })
+  return formatDateWithFormatter(iso, (date) => formatter.format(date))
+}
+
+/**
+ * Formats a duration value (in seconds) as a string in `m:ss` format.
+ *
+ * @pure
+ * @param duration - Duration to format, as seconds or a preformatted string.
+ * @returns Formatted duration string, or the original string if input is already a string.
+ *
+ * @example
+ * ```typescript
+ * formatDuration(65)
+ * // => '1:05'
+ * ```
  */
 export function formatDuration(duration: number | string): string {
   if (typeof duration === 'string') return duration
@@ -123,10 +184,11 @@ export function formatDuration(duration: number | string): string {
 }
 
 /**
- * Normalizes an array of raw podcast entries from the iTunes API into a consistent format.
- * Safely extracts podcast metadata with fallback values.
+ * Normalizes raw podcast entries from the iTunes API into a consistent format.
+ *
+ * @pure
  * @param podcasts - Array of raw podcast entries from the iTunes API.
- * @returns An array of normalized podcast objects with id, title, author, image, and summary.
+ * @returns Array of normalized podcast objects with id, title, author, image, and summary.
  */
 export function normalizePodcasts(podcasts: TAppleEntry[]): Array<{
   id: string

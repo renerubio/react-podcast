@@ -12,21 +12,22 @@ import { useParams } from 'next/navigation'
 import { EpisodesTable } from './EpisodesTable'
 
 /**
- * PodcastDetail component displays detailed information about a specific podcast.
+ * Displays detailed information about a specific podcast.
  *
- * This component fetches and renders:
- * - A sidebar with podcast details
- * - A table of episodes with their count
- * - Skeleton loaders during the loading state
+ * Renders:
+ * - Sidebar with podcast details.
+ * - Table of episodes with their count.
+ * - Skeleton loaders during the loading state.
  *
- * @component
- * @returns The rendered podcast detail page with sidebar and episodes table,
- * or skeleton loaders if data is still loading
+ * @returns Podcast detail view or loading skeletons.
  *
  * @remarks
- * - Requires `podcastId` as a URL parameter
- * - Displays loading skeletons while fetching data
- * - Shows podcast information and associated episodes when loaded
+ * Requires `podcastId` as a URL parameter.
+ *
+ * @example
+ * ```tsx
+ * <PodcastDetail />
+ * ```
  */
 const PodcastDetail = () => {
   const { podcastId } = useParams<{

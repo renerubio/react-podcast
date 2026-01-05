@@ -12,13 +12,20 @@ interface IEpisodeRowProps {
 
 /**
  * Renders a single table row for an episode with title, date, and duration.
- * If the episode has a URL, the title is rendered as a clickable link to the episode detail page.
  *
- * @param props - The component props
- * @param props.episode - The episode data to display
- * @param props.podcastId - The ID of the podcast this episode belongs to
- * @param props.onEpisodeClick - Callback function triggered when the episode link is clicked
- * @returns A table row element containing the episode information
+ * If the episode has a URL, the title is rendered as a clickable link to the
+ * episode detail page.
+ *
+ * @param props - Component props.
+ * @param props.episode - Episode data to display.
+ * @param props.podcastId - Podcast identifier.
+ * @param props.onEpisodeClick - Callback triggered when the episode link is clicked.
+ * @returns Table row element containing the episode information.
+ *
+ * @example
+ * ```tsx
+ * <EpisodeRow episode={episode} podcastId={podcastId} onEpisodeClick={onClick} />
+ * ```
  */
 const EpisodeRow = ({
   episode,

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatDuration, normalizePodcasts, normalizeText } from './normalize'
+import {
+  formatDateWithFormatter,
+  formatDuration,
+  normalizePodcasts,
+  normalizeText
+} from './normalize'
 
 describe('utils/normalize', () => {
   it('normalizeText lowercases and strips diacritics', () => {
@@ -9,6 +14,13 @@ describe('utils/normalize', () => {
 
   it('formatDuration formats seconds to m:ss', () => {
     expect(formatDuration(65)).toBe('1:05')
+  })
+
+  it('formatDateWithFormatter delegates to the provided formatter', () => {
+    const formatter = (date: Date) => `${date.getUTCFullYear()}-OK`
+    expect(formatDateWithFormatter('2025-01-01T00:00:00Z', formatter)).toBe(
+      '2025-OK'
+    )
   })
 
   it('normalizePodcasts maps minimal apple entries', () => {

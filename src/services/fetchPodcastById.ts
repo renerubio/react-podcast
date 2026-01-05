@@ -8,11 +8,14 @@ const APPLE_PODCAST_LOOKUP_URL =
 /**
  * Fetches detailed information about a podcast by its ID from the Apple Podcast API.
  *
- * @param id - The unique identifier of the podcast to fetch
- * @returns A promise that resolves to the podcast detail object
- * @throws {Error} When the fetch request fails, returns a non-OK status, or receives invalid content type
- * @throws {Error} When there's an error parsing the response or accessing podcast data
+ * @param id - Unique identifier of the podcast to fetch.
+ * @returns Promise that resolves to the podcast detail object.
+ * @throws Error when the fetch request fails or returns invalid content.
  *
+ * @example
+ * ```typescript
+ * const detail = await fetchPodcastById('123')
+ * ```
  */
 export async function fetchPodcastById(id: string): Promise<IPodcastDetail> {
   try {

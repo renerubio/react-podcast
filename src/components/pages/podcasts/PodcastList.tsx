@@ -5,8 +5,14 @@ import { Podcast } from './Podcast'
 /**
  * Renders a list of podcasts using the provided filtered podcast data.
  *
- * @param podcastsFiltered - An array of `ITop100Podcasts` objects to display.
- * @returns A React element containing the list of podcasts, or nothing if the array is empty.
+ * @param props - Component props.
+ * @param props.podcastsFiltered - Array of podcasts to display.
+ * @returns Container with the list of podcasts.
+ *
+ * @example
+ * ```tsx
+ * <PodcastList podcastsFiltered={filtered} />
+ * ```
  */
 const PodcastList = ({
   podcastsFiltered

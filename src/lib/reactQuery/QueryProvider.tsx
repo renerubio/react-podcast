@@ -21,7 +21,18 @@ const LEGACY_CACHE_MIGRATION_FLAG = 'react-podcast:legacy-cache-migrated:v1'
  * - Persists the query cache in IndexedDB to keep the existing 24h cache strategy across reloads.
  * - Uses `staleTime` = 24h to avoid refetching while cached data is fresh.
  * - Uses a shorter in-memory `gcTime` to avoid retaining large caches in RAM indefinitely.
- * - Keeps `refetchOnWindowFocus` disabled to minimize background network activity; data refetches on mount only when stale.
+ * - Keeps `refetchOnWindowFocus` disabled to minimize background network activity.
+ *
+ * @param props - Component props.
+ * @param props.children - React children to render inside the provider.
+ * @returns Provider tree with optional persistence and devtools.
+ *
+ * @example
+ * ```tsx
+ * <QueryProvider>
+ *   <App />
+ * </QueryProvider>
+ * ```
  */
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -47,10 +58,12 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
   })
 
   /**
-   * One-time migration from the legacy localStorage TTL cache into TanStack Query.
+   * Migrates legacy localStorage TTL cache into TanStack Query cache.
    *
    * This preserves "instant load" for users who already have cached data from older versions.
-   * After a successful seed, the legacy entries are removed and a migration flag is stored.
+   * After a successful seed, legacy entries are removed and a migration flag is stored.
+   *
+   * @returns A promise that resolves after migration completes or is skipped.
    */
   const migrateLegacyCache = async () => {
     if (typeof window === 'undefined') return

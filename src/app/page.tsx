@@ -3,14 +3,14 @@ import '@/styles/filter.css'
 import '@/styles/podcasts.css'
 
 /**
- * Server-side rendered podcast home page component.
+ * Server-rendered podcast home page.
  *
- * This component serves as the main entry point for the podcast home page,
- * implementing React's Suspense pattern to display a skeleton loader while
- * the main content is being fetched.
+ * @returns Main section containing the podcasts page.
  *
- * @returns {JSX.Element} A main section containing the podcast home page with loading fallback
- *
+ * @example
+ * ```tsx
+ * <PodcastsPage />
+ * ```
  */
 const PodcastsPage = () => (
   <main>

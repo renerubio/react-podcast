@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { filterPodcasts, findEpisodeById } from './podcastHelpers'
+import {
+  buildNavMessagePure,
+  filterPodcasts,
+  findEpisodeById,
+  resolveEpisodeUrlToRemember
+} from './podcastHelpers'
 
 describe('utils/podcastHelpers', () => {
   it('filterPodcasts matches by title or author (case/diacritic-insensitive)', () => {
@@ -19,5 +24,23 @@ describe('utils/podcastHelpers', () => {
     expect(
       findEpisodeById({ episodes, episodeId: 456 as any } as any)?.id
     ).toBe('456')
+  })
+
+  it('resolveEpisodeUrlToRemember returns a string url when inputs are valid', () => {
+    expect(
+      resolveEpisodeUrlToRemember({ episodeId: '1', url: 'https://a.test' })
+    ).toBe('https://a.test')
+  })
+
+  it('resolveEpisodeUrlToRemember returns null when url is missing', () => {
+    expect(
+      resolveEpisodeUrlToRemember({ episodeId: '1', url: undefined })
+    ).toBeNull()
+  })
+
+  it('buildNavMessagePure composes label and target', () => {
+    expect(buildNavMessagePure({ target: 'Home', goToLabel: 'Go to' })).toBe(
+      'Go to Home'
+    )
   })
 })

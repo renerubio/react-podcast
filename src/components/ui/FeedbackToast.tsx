@@ -20,6 +20,7 @@ export function FeedbackToast() {
 
   return (
     <div
+      key={message}
       className="feedback-toast"
       role="status"
       aria-live="polite"

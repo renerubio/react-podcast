@@ -4,10 +4,15 @@ import { fetchWithTimeout } from './fetchWithTimeout'
 /**
  * Fetches and parses an XML feed from the specified URL via a proxy endpoint.
  *
- * @template T - The expected return type after parsing the XML.
- * @param {string} url - The URL of the feed to fetch and parse.
- * @returns {Promise<T>} A promise that resolves to the parsed XML, cast to type T.
- * @throws {Error} If the fetch request fails or returns a non-OK response.
+ * @template T - Expected return type after parsing the XML.
+ * @param url - URL of the feed to fetch and parse.
+ * @returns Promise that resolves to the parsed XML, cast to type T.
+ * @throws Error if the fetch or parsing fails.
+ *
+ * @example
+ * ```typescript
+ * const xml = await fetchParsedFeed<XMLDocument>(feedUrl)
+ * ```
  */
 export async function fetchParsedFeed<T>(url: string): Promise<T> {
   try {
